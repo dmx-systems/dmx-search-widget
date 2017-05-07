@@ -1,11 +1,13 @@
 const state = {
-  visible: false    // true if the search widget is visible
+  visible: false,     // true if the search widget is visible
+  pos: {}
 }
 
 const actions = {
 
-  openSearchWidget () {
+  openSearchWidget (_, pos) {
     state.visible = true
+    state.pos = pos
   },
 
   onSearchWidgetClosed () {
