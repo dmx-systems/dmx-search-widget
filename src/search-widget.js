@@ -10,7 +10,7 @@ const actions = {
     state.pos = pos
   },
 
-  onSearchWidgetClosed () {
+  closeSearchWidget () {
     state.visible = false
   }
 }

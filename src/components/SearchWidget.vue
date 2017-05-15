@@ -1,10 +1,11 @@
 <template>
-  <el-dialog :visible="visible" @update:visible="update" :modal="false" title="Search" custom-class="search-widget">
+  <el-dialog custom-class="search-widget" :visible="visible" @update:visible="update" :modal="false" title="Search">
     <el-input v-model="search" size="small"></el-input>
-    <el-table :data="searchResult">
+    <el-table :data="searchResult" highlight-current-row @current-change="onSelection">
       <el-table-column prop="value" label="Topic"></el-table-column>
       <el-table-column prop="typeName" label="Type"></el-table-column>
     </el-table>
+    <el-button @click="revealTopic">Reveal Topic</el-button>
   </el-dialog>
 </template>
 
@@ -16,7 +17,8 @@ export default {
   data () {
     return {
       search: '',
-      searchResult: undefined
+      searchResult: undefined,
+      topic: undefined
     }
   },
 
@@ -32,14 +34,28 @@ export default {
   },
 
   methods: {
+
     update (visible) {
       if (visible) {
         var style = this.$el.querySelector('.el-dialog.search-widget').style
         style.top  = this.pos.y + 'px'
         style.left = this.pos.x + 'px'
       } else {
-        this.$store.dispatch('onSearchWidgetClosed')
+        this.close()
       }
+    },
+
+    onSelection (topic) {
+      this.topic = topic
+    },
+
+    revealTopic () {
+      this.close()
+      this.$store.dispatch('onTopicReveal', this.topic.id)
+    },
+
+    close () {
+      this.$store.dispatch('closeSearchWidget')
     }
   },
 
@@ -64,8 +80,13 @@ export default {
   transform: none;    /* reset el-dialog translateX */
 }
 
-/* TODO: avoid dialog overflow and drop this rule then */
-.el-dialog__wrapper {
-  overflow: hidden;
+.search-widget .el-table {
+  margin-top: 1em;
+  margin-bottom: 1em;
 }
+
+/* TODO: avoid dialog overflow and drop this rule then */
+/*.el-dialog__wrapper {
+  overflow: hidden;
+}*/
 </style>
