@@ -1,10 +1,14 @@
 const state = {
   visible: false,     // true if the search widget is visible
-  pos: {}             // search widget position (object with 'x' and 'y' properties)
+  pos: {}             // search widget position in `model` and `rendered` coordinates
+                      // (2 objects with 'x' and 'y' properties)
 }
 
 const actions = {
 
+  /**
+   * @param   pos   `model` and `rendered` positions
+   */
   openSearchWidget (_, pos) {
     state.visible = true
     state.pos = pos
