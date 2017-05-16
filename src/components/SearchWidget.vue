@@ -38,8 +38,8 @@ export default {
     update (visible) {
       if (visible) {
         var style = this.$el.querySelector('.el-dialog.search-widget').style
-        style.top  = this.pos.rendered.y + 'px'
-        style.left = this.pos.rendered.x + 'px'
+        style.top  = this.pos.render.y + 'px'
+        style.left = this.pos.render.x + 'px'
       } else {
         this.close()
       }
@@ -52,7 +52,7 @@ export default {
     revealTopic () {
       this.close()
       this.$store.dispatch('onTopicReveal', {
-        id: this.topic.id,
+        topic: this.topic,
         pos: this.pos.model
       })
     },
