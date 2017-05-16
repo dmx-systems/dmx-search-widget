@@ -1,11 +1,12 @@
 <template>
-  <el-dialog custom-class="search-widget" :visible="visible" @update:visible="update" :modal="false" title="Search">
+  <el-dialog custom-class="search-widget" :visible="visible" @update:visible="update" :modal="false" :show-close="false"
+             title="Search / Create">
+    <div>Search</div>
     <el-input v-model="search" size="small"></el-input>
-    <el-table :data="searchResult" highlight-current-row @current-change="onSelection">
-      <el-table-column prop="value" label="Topic"></el-table-column>
-      <el-table-column prop="typeName" label="Type"></el-table-column>
+    <el-table :data="searchResult" :default-sort="{prop: 'typeName'}" empty-text="No Match" @current-change="revealTopic">
+      <el-table-column prop="value" label="Topic" sortable></el-table-column>
+      <el-table-column prop="typeName" label="Type" sortable></el-table-column>
     </el-table>
-    <el-button @click="revealTopic">Reveal Topic</el-button>
   </el-dialog>
 </template>
 
@@ -17,8 +18,7 @@ export default {
   data () {
     return {
       search: '',
-      searchResult: undefined,
-      topic: undefined
+      searchResult: undefined
     }
   },
 
@@ -45,14 +45,10 @@ export default {
       }
     },
 
-    onSelection (topic) {
-      this.topic = topic
-    },
-
-    revealTopic () {
+    revealTopic (topic) {
       this.close()
       this.$store.dispatch('onTopicReveal', {
-        topic: this.topic,
+        topic,
         pos: this.pos.model
       })
     },
@@ -85,7 +81,6 @@ export default {
 
 .search-widget .el-table {
   margin-top: 1em;
-  margin-bottom: 1em;
 }
 
 /* TODO: avoid dialog overflow and drop this rule then */
