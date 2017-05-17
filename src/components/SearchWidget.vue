@@ -1,11 +1,23 @@
 <template>
   <el-dialog custom-class="search-widget" :visible="visible" @update:visible="update" :modal="false" :show-close="false"
              title="Search / Create">
-    <div>Search</div>
-    <el-input v-model="search" size="small"></el-input>
-    <el-table :data="searchResult" :default-sort="{prop: 'typeName'}" empty-text="No Match" @current-change="revealTopic">
-      <el-table-column prop="value" label="Topic" sortable></el-table-column>
-      <el-table-column prop="typeName" label="Type" sortable></el-table-column>
+    <div class="controls">
+      <div class="search">
+        <div>Search</div>
+        <el-input v-model="search" size="small"></el-input>
+      </div>
+      <div class="create">
+        <el-button size="small">Create Topic</el-button>
+        <el-select v-model="topicTypeUri" size="small">
+          <el-option v-for="topicType in menuTopicTypes" :label="topicType.value" :value="topicType.uri"
+                    :key="topicType.uri">
+          </el-option>
+        </el-select>
+      </div>
+    </div>
+    <el-table :data="searchResult" :default-sort="{prop: 'typeName'}" empty-text="No Match" @current-change="reveal">
+      <el-table-column prop="value"    label="Topic" sortable></el-table-column>
+      <el-table-column prop="typeName" label="Type"  sortable></el-table-column>
     </el-table>
   </el-dialog>
 </template>
@@ -15,10 +27,13 @@ import dm5 from 'dm5'
 
 export default {
 
+  props: ['menuTopicTypes'],
+
   data () {
     return {
       search: '',
-      searchResult: undefined
+      searchResult: undefined,
+      topicTypeUri: undefined
     }
   },
 
@@ -45,7 +60,7 @@ export default {
       }
     },
 
-    revealTopic (topic) {
+    reveal (topic) {
       this.close()
       this.$store.dispatch('onTopicReveal', {
         topic,
@@ -77,6 +92,19 @@ export default {
 <style>
 .search-widget {
   transform: none;    /* reset el-dialog translateX */
+}
+
+.search-widget .controls {
+  display: flex;
+  align-items: flex-end;
+}
+
+.search-widget .controls .search {
+  flex: auto;
+}
+
+.search-widget .controls .create {
+  margin-left: 1em;
 }
 
 .search-widget .el-table {
