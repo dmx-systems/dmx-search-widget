@@ -7,15 +7,16 @@
         <el-input v-model="search" size="small"></el-input>
       </div>
       <div class="create">
-        <el-button size="small">Create Topic</el-button>
+        <el-button size="small" @click="createTopic">Create Topic</el-button>
         <el-select v-model="topicTypeUri" size="small">
           <el-option v-for="topicType in menuTopicTypes" :label="topicType.value" :value="topicType.uri"
-                    :key="topicType.uri">
+                     :key="topicType.uri">
           </el-option>
         </el-select>
       </div>
     </div>
-    <el-table :data="searchResult" :default-sort="{prop: 'typeName'}" empty-text="No Match" @current-change="reveal">
+    <el-table :data="searchResult" :default-sort="{prop: 'typeName'}" empty-text="No Match"
+              @current-change="revealTopic">
       <el-table-column prop="value"    label="Topic" sortable></el-table-column>
       <el-table-column prop="typeName" label="Type"  sortable></el-table-column>
     </el-table>
@@ -50,6 +51,28 @@ export default {
 
   methods: {
 
+    revealTopic (topic) {
+      this.close()
+      this._revealTopic(topic)
+    },
+
+    createTopic () {
+      this.close()
+      const topicModel = dm5.typeCache.getTopicType(this.topicTypeUri).newTopicModel(this.search)
+      console.log('createTopic', topicModel)
+      dm5.restClient.createTopic(topicModel).then(topic => {
+        console.log(topic)
+        this._revealTopic(topic)
+      })
+    },
+
+    _revealTopic (topic) {
+      this.$store.dispatch('revealTopic', {
+        topic,
+        pos: this.pos.model
+      })
+    },
+
     update (visible) {
       if (visible) {
         var style = this.$el.querySelector('.el-dialog.search-widget').style
@@ -58,14 +81,6 @@ export default {
       } else {
         this.close()
       }
-    },
-
-    reveal (topic) {
-      this.close()
-      this.$store.dispatch('onTopicReveal', {
-        topic,
-        pos: this.pos.model
-      })
     },
 
     close () {
