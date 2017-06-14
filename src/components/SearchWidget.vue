@@ -63,6 +63,8 @@ export default {
       dm5.restClient.createTopic(topicModel).then(topic => {
         console.log(topic)
         this._revealTopic(topic)
+      }).catch(error => {
+        console.error(error)
       })
     },
 
