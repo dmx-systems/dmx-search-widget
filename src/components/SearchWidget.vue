@@ -7,16 +7,15 @@
         <el-input v-model="search" size="small"></el-input>
       </div>
       <div class="create">
-        <el-button size="small" @click="createTopic">Create Topic</el-button>
         <el-select v-model="topicTypeUri" size="small">
           <el-option v-for="topicType in menuTopicTypes" :label="topicType.value" :value="topicType.uri"
                      :key="topicType.uri">
           </el-option>
         </el-select>
+        <el-button size="small" @click="createTopic">Create Topic</el-button>
       </div>
     </div>
-    <el-table :data="searchResult" :default-sort="{prop: 'typeName'}" empty-text="No Match"
-              @current-change="revealTopic">
+    <el-table :data="searchResult" :default-sort="{prop: 'typeName'}" empty-text="No Match" @row-click="revealTopic">
       <el-table-column prop="value"    label="Topic" sortable></el-table-column>
       <el-table-column prop="typeName" label="Type"  sortable></el-table-column>
     </el-table>
@@ -121,6 +120,7 @@ export default {
 }
 
 .search-widget .controls .create {
+  display: flex;
   margin-left: 1em;
 }
 
