@@ -12,7 +12,7 @@
                      :key="topicType.uri">
           </el-option>
         </el-select>
-        <el-button size="small" @click="createTopic">Create Topic</el-button>
+        <el-button size="small" :disabled="!search || !topicTypeUri" @click="createTopic">Create Topic</el-button>
       </div>
     </div>
     <el-table :data="searchResult" :default-sort="{prop: 'typeName'}" empty-text="No Match" @row-click="revealTopic">
@@ -45,6 +45,10 @@ export default {
 
     pos () {
       return this.$store.state.searchWidget.pos
+    },
+
+    searchQuery () {
+      return this.search + '*'    // TODO
     }
   },
 
@@ -92,9 +96,11 @@ export default {
   watch: {
     search () {
       if (this.search) {
-        dm5.restClient.searchTopics(this.search).then(topics => {
+        dm5.restClient.searchTopics(this.searchQuery).then(topics => {
           this.searchResult = topics
         })
+      } else {
+        this.searchResult = undefined
       }
     }
   },
