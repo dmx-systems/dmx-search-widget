@@ -3,7 +3,7 @@
              title="Search / Create">
     <div class="controls">
       <div class="search">
-        <div>Search</div>
+        <div class="label">Search</div>
         <el-input v-model="search" size="small"></el-input>
       </div>
       <div class="create">
@@ -123,6 +123,11 @@ export default {
 
 .search-widget .controls .search {
   flex: auto;
+}
+
+.search-widget .controls .search .label {
+  font-size: var(--label-font-size);
+  color:     var(--label-color);
 }
 
 .search-widget .controls .create {
