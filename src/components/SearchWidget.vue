@@ -74,7 +74,8 @@ export default {
     _revealTopic (topic) {
       this.$store.dispatch('revealTopic', {
         topic,
-        pos: this.pos.model
+        pos: this.pos.model,
+        select: true
       })
     },
 
