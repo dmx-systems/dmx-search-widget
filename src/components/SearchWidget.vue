@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="search-widget" :visible="visible" @update:visible="update" :modal="false" :show-close="false"
+  <el-dialog custom-class="search-widget" :visible.sync="visible" :modal="false" :show-close="false"
              title="Search / Create">
     <div class="controls">
       <div class="search">
@@ -39,8 +39,20 @@ export default {
 
   computed: {
 
-    visible () {
-      return this.$store.state.searchWidget.visible
+    visible: {
+      get: function () {
+        return this.$store.state.searchWidget.visible
+      },
+      set: function (visible) {
+        // console.log('visible setter', visible)    // FIXME: called twice on close
+        if (visible) {
+          var style = this.$el.querySelector('.el-dialog.search-widget').style
+          style.top  = this.pos.render.y + 'px'
+          style.left = this.pos.render.x + 'px'
+        } else {
+          this.close()
+        }
+      }
     },
 
     pos () {
@@ -77,16 +89,6 @@ export default {
         pos: this.pos.model,
         select: true
       })
-    },
-
-    update (visible) {
-      if (visible) {
-        var style = this.$el.querySelector('.el-dialog.search-widget').style
-        style.top  = this.pos.render.y + 'px'
-        style.left = this.pos.render.x + 'px'
-      } else {
-        this.close()
-      }
     },
 
     close () {

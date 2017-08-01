@@ -1,7 +1,7 @@
 const state = {
-  visible: false,     // true if the search widget is visible
+  visible: false,     // search widget visibility
   pos: {}             // search widget position in `model` and `render` coordinates
-                      // (2 objects with 'x' and 'y' properties)
+                      // (objects with 'x' and 'y' properties)
 }
 
 const actions = {
