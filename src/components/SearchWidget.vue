@@ -1,15 +1,15 @@
 <template>
   <el-dialog custom-class="search-widget" :visible.sync="visible" :modal="false" :show-close="false"
-             title="Search / Create">
+    title="Search / Create">
     <div class="controls">
       <div class="search">
-        <div class="label">Search</div>
+        <div class="field-label">Search</div>
         <el-input v-model="search" size="small"></el-input>
       </div>
       <div class="create">
         <el-select v-model="topicTypeUri" size="small">
           <el-option v-for="topicType in menuTopicTypes" :label="topicType.value" :value="topicType.uri"
-                     :key="topicType.uri">
+            :key="topicType.uri">
           </el-option>
         </el-select>
         <el-button size="small" :disabled="!search || !topicTypeUri" @click="createTopic">Create Topic</el-button>
@@ -40,10 +40,10 @@ export default {
   computed: {
 
     visible: {
-      get: function () {
+      get () {
         return this.$store.state.searchWidget.visible
       },
-      set: function (visible) {
+      set (visible) {
         // console.log('visible setter', visible)    // FIXME: called twice on close
         if (visible) {
           var style = this.$el.querySelector('.el-dialog.search-widget').style
@@ -57,6 +57,14 @@ export default {
 
     pos () {
       return this.$store.state.searchWidget.pos
+    },
+
+    noSelect () {
+      return this.$store.state.searchWidget.noSelect
+    },
+
+    auxAction () {
+      return this.$store.state.searchWidget.auxAction
     },
 
     searchQuery () {
@@ -87,8 +95,11 @@ export default {
       this.$store.dispatch('revealTopic', {
         topic,
         pos: this.pos.model,
-        select: true
+        select: !this.noSelect
       })
+      if (this.auxAction) {
+        this.$store.dispatch(this.auxAction, topic)
+      }
     },
 
     close () {
@@ -128,11 +139,6 @@ export default {
   flex: auto;
 }
 
-.search-widget .controls .search .label {
-  font-size: var(--label-font-size);
-  color:     var(--label-color);
-}
-
 .search-widget .controls .create {
   display: flex;
   margin-left: 1em;
@@ -141,9 +147,4 @@ export default {
 .search-widget .el-table {
   margin-top: 1em;
 }
-
-/* TODO: avoid dialog overflow and drop this rule then */
-/*.el-dialog__wrapper {
-  overflow: hidden;
-}*/
 </style>
