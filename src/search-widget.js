@@ -3,9 +3,9 @@ const state = {
   pos: undefined,           // search widget position in `model` and `render` coordinates
                             // (objects with 'x' and 'y' properties)
   noSelect: false,          // Optional: if trueish the revealed topic will not be selected.
-                            // Otherwise is will be selected.
-  auxAction: undefined      // Optional: the Vuex action (string) that is dispatched after "revealTopic".
-                            // Its payload will be the revealed topic.
+                            // Otherwise it will.
+  auxAction: undefined      // Optional: an additional Vuex action (string) that is dispatched subsequently to
+                            // "revealTopic". Its payload will be the revealed topic.
                             // If undefined no additional action is dispatched.
 }
 
