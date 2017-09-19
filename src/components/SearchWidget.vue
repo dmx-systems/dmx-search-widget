@@ -7,12 +7,12 @@
         <el-input v-model="search" size="small"></el-input>
       </div>
       <div class="create">
-        <el-select v-model="topicTypeUri" size="small">
-          <el-option v-for="topicType in menuTopicTypes" :label="topicType.value" :value="topicType.uri"
-            :key="topicType.uri">
-          </el-option>
+        <el-select v-model="menuItem" value-key="uri" size="small">
+          <el-option v-for="type in menuTopicTypes" :label="type.value" :value="type" :key="type.uri"></el-option>
+          <el-option value="-" disabled></el-option>
+          <el-option v-for="item in extraMenuItems" :label="item.label" :value="item" :key="item.uri"></el-option>
         </el-select>
-        <el-button size="small" :disabled="!search || !topicTypeUri" @click="createTopic">Create Topic</el-button>
+        <el-button size="small" :disabled="!search || !menuItem" @click="buttonHandler">Create Topic</el-button>
       </div>
     </div>
     <el-table :data="searchResult" :default-sort="{prop: 'typeName'}" empty-text="No Match" @row-click="revealTopic">
@@ -27,13 +27,17 @@ import dm5 from 'dm5'
 
 export default {
 
-  props: ['menuTopicTypes'],
+  created () {
+    this.$store.registerModule('searchWidget', require('../search-widget').default)
+  },
+
+  props: ['menuTopicTypes', 'extraMenuItems'],
 
   data () {
     return {
       search: '',
       searchResult: undefined,
-      topicTypeUri: undefined
+      menuItem: undefined
     }
   },
 
@@ -79,9 +83,17 @@ export default {
       this._revealTopic(topic)
     },
 
-    createTopic () {
+    buttonHandler () {
+      if (this.menuItem instanceof dm5.TopicType) {
+        this.createTopic(this.menuItem)
+      } else {
+        this.createExtra()
+      }
       this.close()
-      const topicModel = dm5.typeCache.getTopicType(this.topicTypeUri).newTopicModel(this.search)
+    },
+
+    createTopic (topicType) {
+      const topicModel = topicType.newTopicModel(this.search)
       console.log('createTopic', topicModel)
       dm5.restClient.createTopic(topicModel).then(topic => {
         console.log(topic)
@@ -89,6 +101,10 @@ export default {
       }).catch(error => {
         console.error(error)
       })
+    },
+
+    createExtra () {
+      this.menuItem.create(this.search)
     },
 
     _revealTopic (topic) {
@@ -117,10 +133,6 @@ export default {
         this.searchResult = undefined
       }
     }
-  },
-
-  created () {
-    this.$store.registerModule('searchWidget', require('../search-widget').default)
   }
 }
 </script>
