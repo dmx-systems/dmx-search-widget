@@ -12,7 +12,7 @@
           <el-option value="-" disabled></el-option>
           <el-option v-for="item in extraMenuItems" :label="item.label" :value="item" :key="item.uri"></el-option>
         </el-select>
-        <el-button size="small" :disabled="!search || !menuItem" @click="buttonHandler">Create Topic</el-button>
+        <el-button size="small" :disabled="!search || !menuItem" @click="buttonHandler">Create</el-button>
       </div>
     </div>
     <el-table :data="searchResult" :default-sort="{prop: 'typeName'}" empty-text="No Match" @row-click="revealTopic">
@@ -84,12 +84,12 @@ export default {
     },
 
     buttonHandler () {
+      this.close()
       if (this.menuItem instanceof dm5.TopicType) {
         this.createTopic(this.menuItem)
       } else {
         this.createExtra()
       }
-      this.close()
     },
 
     createTopic (topicType) {
