@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.5** -- Oct 3, 2017
+
+* Parent component can add extra items to type menu
+
 **0.4** -- Sep 7, 2017
 
 * 2 new options: `noSelect` and `auxAction`
@@ -14,4 +18,4 @@
 
 ------------
 Jörg Richter  
-Sep 7, 2017
+Oct 3, 2017
