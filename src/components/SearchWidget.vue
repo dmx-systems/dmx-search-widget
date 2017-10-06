@@ -31,7 +31,7 @@ export default {
     this.$store.registerModule('searchWidget', require('../search-widget').default)
   },
 
-  props: ['menuTopicTypes', 'extraMenuItems'],
+  props: ['menuTopicTypes'],
 
   data () {
     return {
@@ -61,6 +61,10 @@ export default {
 
     pos () {
       return this.$store.state.searchWidget.pos
+    },
+
+    extraMenuItems () {
+      return this.$store.state.searchWidget.extraMenuItems
     },
 
     noSelect () {
