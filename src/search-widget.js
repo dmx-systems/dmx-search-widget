@@ -2,7 +2,7 @@ const state = {
   visible: false,           // search widget visibility
   pos: undefined,           // search widget position in `model` and `render` coordinates
                             // (objects with 'x' and 'y' properties)
-  extraMenuItems: [],       // Extra type menu items which require dedicated instantiation logic.
+  extraMenuItems: [],       // Extra type menu items which require special instantiation logic.
   noSelect: false,          // Optional: if trueish the revealed topic will not be selected.
                             // Otherwise it will.
   auxAction: undefined      // Optional: an additional Vuex action (string) that is dispatched subsequently to
@@ -27,7 +27,7 @@ const actions = {
   },
 
   registerExtraMenuItems (_, items) {
-    state.extraMenuItems = state.extraMenuItems.concat(items)
+    state.extraMenuItems = [...state.extraMenuItems, ...items]
   }
 }
 

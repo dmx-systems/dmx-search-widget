@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.6** -- Oct 19, 2017
+
+* Incremental injection of extra items into type menu (via action)
+
 **0.5** -- Oct 3, 2017
 
 * Parent component can add extra items to type menu
@@ -18,4 +22,4 @@
 
 ------------
 Jörg Richter  
-Oct 3, 2017
+Oct 19, 2017
