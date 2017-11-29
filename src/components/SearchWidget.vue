@@ -1,6 +1,6 @@
 <template>
-  <el-dialog custom-class="search-widget" :visible.sync="visible" :modal="false" :show-close="false"
-    title="Search / Create">
+  <el-dialog custom-class="search-widget" :visible="visible" :modal="false" :show-close="false" title="Search / Create"
+      @open="open" @close="close">
     <div class="controls">
       <div class="search">
         <div class="field-label">Search</div>
@@ -43,20 +43,8 @@ export default {
 
   computed: {
 
-    visible: {
-      get () {
-        return this.$store.state.searchWidget.visible
-      },
-      set (visible) {
-        // console.log('visible setter', visible)    // FIXME: called twice on close
-        if (visible) {
-          var style = this.$el.querySelector('.el-dialog.search-widget').style
-          style.top  = this.pos.render.y + 'px'
-          style.left = this.pos.render.x + 'px'
-        } else {
-          this.close()
-        }
-      }
+    visible () {
+      return this.$store.state.searchWidget.visible
     },
 
     pos () {
@@ -81,6 +69,19 @@ export default {
   },
 
   methods: {
+
+    open () {
+      console.log('open')
+      var style = this.$el.querySelector('.el-dialog.search-widget').style
+      style.top  = this.pos.render.y + 'px'
+      style.left = this.pos.render.x + 'px'
+    },
+
+    close () {
+      // FIXME: called twice when closing programmatically (through revealTopic())
+      console.log('close')
+      this.$store.dispatch('closeSearchWidget')
+    },
 
     revealTopic (topic) {
       this.close()
@@ -120,10 +121,6 @@ export default {
       if (this.auxAction) {
         this.$store.dispatch(this.auxAction, topic)
       }
-    },
-
-    close () {
-      this.$store.dispatch('closeSearchWidget')
     }
   },
 
@@ -142,7 +139,7 @@ export default {
 </script>
 
 <style>
-.search-widget {
+.el-dialog.search-widget {
   margin: 0 !important;    /* reset el-dialog margin */
 }
 
