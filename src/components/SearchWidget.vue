@@ -4,15 +4,15 @@
     <div class="controls">
       <div class="search">
         <div class="field-label">Search</div>
-        <el-input v-model="search" size="small"></el-input>
+        <el-input v-model="search"></el-input>
       </div>
       <div class="create">
-        <el-select v-model="menuItem" value-key="uri" size="small">
+        <el-select v-model="menuItem" value-key="uri">
           <el-option v-for="type in menuTopicTypes" :label="type.value" :value="type" :key="type.uri"></el-option>
           <el-option value="-" disabled></el-option>
           <el-option v-for="item in extraMenuItems" :label="item.label" :value="item" :key="item.uri"></el-option>
         </el-select>
-        <el-button size="small" :disabled="!search || !menuItem" @click="buttonHandler">Create</el-button>
+        <el-button :disabled="!search || !menuItem" @click="buttonHandler">Create</el-button>
       </div>
     </div>
     <el-table :data="searchResult" :default-sort="{prop: 'typeName'}" empty-text="No Match" @row-click="revealTopic">
@@ -143,7 +143,7 @@ export default {
 
 <style>
 .search-widget {
-  transform: none;    /* reset el-dialog translateX */
+  margin: 0 !important;    /* reset el-dialog margin */
 }
 
 .search-widget .controls {
