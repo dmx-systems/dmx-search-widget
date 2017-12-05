@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.7** -- Dec 5, 2017
+
+* Adapt to Element UI 2.0
+
 **0.6** -- Oct 19, 2017
 
 * Incremental injection of extra items into type menu (via action)
@@ -22,4 +26,4 @@
 
 ------------
 Jörg Richter  
-Oct 19, 2017
+Dec 5, 2017
