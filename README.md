@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.8** -- Jan 13, 2018
+
+* Minor layout change
+
 **0.7** -- Dec 5, 2017
 
 * Adapt to Element UI 2.0
@@ -26,4 +30,4 @@
 
 ------------
 Jörg Richter  
-Dec 5, 2017
+Jan 13, 2018
