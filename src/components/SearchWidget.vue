@@ -59,8 +59,8 @@ export default {
       return this.$store.state.searchWidget.noSelect
     },
 
-    auxAction () {
-      return this.$store.state.searchWidget.auxAction
+    topicHandler () {
+      return this.$store.state.searchWidget.topicHandler
     },
 
     searchQuery () {
@@ -71,7 +71,7 @@ export default {
   methods: {
 
     open () {
-      console.log('open')
+      // console.log('open')
       var style = this.$el.querySelector('.el-dialog.search-widget').style
       style.top  = this.pos.render.y + 'px'
       style.left = this.pos.render.x + 'px'
@@ -79,7 +79,7 @@ export default {
 
     close () {
       // FIXME: called twice when closing programmatically (through revealTopic())
-      console.log('close')
+      // console.log('close')
       this.$store.dispatch('closeSearchWidget')
     },
 
@@ -99,7 +99,7 @@ export default {
 
     createTopic (topicType) {
       const topicModel = topicType.newTopicModel(this.search)
-      console.log('createTopic', topicModel)
+      // console.log('createTopic', topicModel)
       dm5.restClient.createTopic(topicModel).then(topic => {
         console.log(topic)
         this._revealTopic(topic)
@@ -118,8 +118,8 @@ export default {
         pos: this.pos.model,
         select: !this.noSelect
       })
-      if (this.auxAction) {
-        this.$store.dispatch(this.auxAction, topic)
+      if (this.topicHandler) {
+        this.topicHandler(topic)
       }
     }
   },

@@ -5,9 +5,9 @@ const state = {
   extraMenuItems: [],       // Extra type menu items which require special instantiation logic.
   noSelect: false,          // Optional: if trueish the revealed topic will not be selected.
                             // Otherwise it will.
-  auxAction: undefined      // Optional: an additional Vuex action (string) that is dispatched subsequently to
+  topicHandler: undefined   // Optional: an additional Vuex action (string) that is dispatched subsequently to
                             // "revealTopic". Its payload will be the revealed topic.
-                            // If undefined no additional action is dispatched.
+                            // If undefined no additional action is dispatched. ### FIXDOC
 }
 
 const actions = {
@@ -18,8 +18,8 @@ const actions = {
   openSearchWidget (_, {pos, options}) {
     state.visible = true
     state.pos = pos
-    state.noSelect  = options && options.noSelect
-    state.auxAction = options && options.auxAction
+    state.noSelect     = options && options.noSelect
+    state.topicHandler = options && options.topicHandler
   },
 
   closeSearchWidget () {
