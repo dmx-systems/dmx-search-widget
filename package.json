@@ -4,6 +4,7 @@
   "description": "The DeepaMehta 5 search/create widget as a composable GUI component",
   "author": "Jörg Richter",
   "license": "MIT",
+  "main": "src/components/SearchWidget.vue",
   "repository": {
     "type": "git",
     "url": "https://github.com/jri/dm5-search-widget.git"
