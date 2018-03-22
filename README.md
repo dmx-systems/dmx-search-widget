@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.9** -- Mar 22, 2018
+
+* New option `topicHandler` replaces `auxAction`
+
 **0.8** -- Jan 13, 2018
 
 * Minor layout change
@@ -30,4 +34,4 @@
 
 ------------
 Jörg Richter  
-Jan 13, 2018
+Mar 22, 2018
