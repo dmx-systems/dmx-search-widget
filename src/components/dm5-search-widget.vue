@@ -4,7 +4,7 @@
     <div class="controls">
       <div class="search">
         <div class="field-label">Search</div>
-        <el-input v-model="search"></el-input>
+        <el-input v-model="searchTerm"></el-input>
       </div>
       <div class="create">
         <el-select v-model="menuItem" value-key="uri">
@@ -12,13 +12,10 @@
           <el-option value="-" disabled></el-option>
           <el-option v-for="item in extraMenuItems" :label="item.label" :value="item" :key="item.uri"></el-option>
         </el-select>
-        <el-button :disabled="!search || !menuItem" @click="buttonHandler">Create</el-button>
+        <el-button :disabled="!searchTerm || !menuItem" @click="buttonHandler">Create</el-button>
       </div>
     </div>
-    <el-table :data="searchResult" :default-sort="{prop: 'typeName'}" empty-text="No Match" @row-click="revealTopic">
-      <el-table-column prop="value"    label="Topic" sortable></el-table-column>
-      <el-table-column prop="typeName" label="Type"  sortable></el-table-column>
-    </el-table>
+    <dm5-topic-list :topics="resultTopics" @topic-click="revealTopic"></dm5-topic-list>
   </el-dialog>
 </template>
 
@@ -35,8 +32,8 @@ export default {
 
   data () {
     return {
-      search: '',
-      searchResult: undefined,
+      searchTerm: '',
+      resultTopics: undefined,
       menuItem: undefined
     }
   },
@@ -64,7 +61,7 @@ export default {
     },
 
     searchQuery () {
-      return this.search + '*'    // TODO
+      return this.searchTerm + '*'    // TODO
     }
   },
 
@@ -98,7 +95,7 @@ export default {
     },
 
     createTopic (topicType) {
-      const topicModel = topicType.newTopicModel(this.search)
+      const topicModel = topicType.newTopicModel(this.searchTerm)
       // console.log('createTopic', topicModel)
       dm5.restClient.createTopic(topicModel).then(topic => {
         console.log(topic)
@@ -109,10 +106,11 @@ export default {
     },
 
     createExtra () {
-      this.menuItem.create(this.search)
+      this.menuItem.create(this.searchTerm)
     },
 
     _revealTopic (topic) {
+      // TODO: decoupling. Don't dispatch into host application.
       this.$store.dispatch('revealTopic', {
         topic,
         pos: this.pos.model,
@@ -125,15 +123,19 @@ export default {
   },
 
   watch: {
-    search () {
-      if (this.search) {
+    searchTerm () {
+      if (this.searchTerm) {
         dm5.restClient.searchTopics(this.searchQuery).then(topics => {
-          this.searchResult = topics
+          this.resultTopics = topics
         })
       } else {
-        this.searchResult = undefined
+        this.resultTopics = undefined
       }
     }
+  },
+
+  components: {
+    'dm5-topic-list': require('dm5-topic-list').default
   }
 }
 </script>
