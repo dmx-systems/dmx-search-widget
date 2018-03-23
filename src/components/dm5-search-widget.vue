@@ -15,11 +15,14 @@
         <el-button :disabled="!searchTerm || !menuItem" @click="buttonHandler">Create</el-button>
       </div>
     </div>
-    <dm5-topic-list :topics="resultTopics" @topic-click="revealTopic"></dm5-topic-list>
+    <dm5-topic-list class="result" :topics="resultTopics" empty-text="No Match" v-if="searchTerm"
+      @topic-click="revealTopic">
+    </dm5-topic-list>
   </el-dialog>
 </template>
 
 <script>
+import Vuex from 'vuex'
 import dm5 from 'dm5'
 
 export default {
@@ -40,25 +43,13 @@ export default {
 
   computed: {
 
-    visible () {
-      return this.$store.state.searchWidget.visible
-    },
-
-    pos () {
-      return this.$store.state.searchWidget.pos
-    },
-
-    extraMenuItems () {
-      return this.$store.state.searchWidget.extraMenuItems
-    },
-
-    noSelect () {
-      return this.$store.state.searchWidget.noSelect
-    },
-
-    topicHandler () {
-      return this.$store.state.searchWidget.topicHandler
-    },
+    ...Vuex.mapState({
+      visible:        state => state.searchWidget.visible,
+      pos:            state => state.searchWidget.pos,
+      extraMenuItems: state => state.searchWidget.extraMenuItems,
+      noSelect:       state => state.searchWidget.noSelect,
+      topicHandler:   state => state.searchWidget.topicHandler
+    }),
 
     searchQuery () {
       return this.searchTerm + '*'    // TODO
@@ -159,7 +150,7 @@ export default {
   margin-left: 1em;
 }
 
-.search-widget .el-table {
+.search-widget .result {
   margin-top: 1.5em;
 }
 </style>
