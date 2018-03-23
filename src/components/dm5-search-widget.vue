@@ -15,8 +15,11 @@
         <el-button :disabled="!searchTerm || !menuItem" @click="buttonHandler">Create</el-button>
       </div>
     </div>
-    <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" @topic-click="revealTopic">
-    </dm5-topic-list>
+    <div class="main">
+      <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" @topic-click="revealTopic">
+      </dm5-topic-list>
+      <component :is="optionsComp"></component>
+    </div>
   </el-dialog>
 </template>
 
@@ -36,7 +39,9 @@ export default {
     return {
       searchTerm: '',
       resultTopics: [],
-      menuItem: undefined
+      menuItem: undefined   // Selected item of create menu.
+                            // Either a dm5.TopicType or an extra menu item (Object).
+                            // Undefined if no item is selected.
     }
   },
 
@@ -52,6 +57,14 @@ export default {
 
     searchQuery () {
       return this.searchTerm + '*'    // TODO
+    },
+
+    optionsComp () {
+      return this.isExtraMenuItem && this.menuItem.optionsComp
+    },
+
+    isExtraMenuItem () {
+      return this.menuItem && this.menuItem.constructor.name === 'Object'
     }
   },
 
@@ -77,14 +90,15 @@ export default {
 
     buttonHandler () {
       this.close()
-      if (this.menuItem instanceof dm5.TopicType) {
-        this.createTopic(this.menuItem)
+      if (this.isExtraMenuItem) {
+        this.menuItem.create(this.searchTerm)
       } else {
-        this.createExtra()
+        this.createTopic()
       }
     },
 
-    createTopic (topicType) {
+    createTopic () {
+      const topicType = this.menuItem
       const topicModel = topicType.newTopicModel(this.searchTerm)
       // console.log('createTopic', topicModel)
       dm5.restClient.createTopic(topicModel).then(topic => {
@@ -93,10 +107,6 @@ export default {
       }).catch(error => {
         console.error(error)
       })
-    },
-
-    createExtra () {
-      this.menuItem.create(this.searchTerm)
     },
 
     _revealTopic (topic) {
@@ -149,7 +159,12 @@ export default {
   margin-left: 1em;
 }
 
-.search-widget .dm5-topic-list {
+.search-widget .main {
+  display: flex;
   margin-top: 1.5em;
+}
+
+.search-widget .main .dm5-topic-list {
+  flex: auto;
 }
 </style>
