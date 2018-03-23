@@ -1,6 +1,6 @@
 <template>
-  <el-dialog custom-class="search-widget" :visible="visible" :modal="false" :show-close="false" title="Search / Create"
-      @open="open" @close="close">
+  <el-dialog custom-class="search-widget" :visible="visible" :modal="false" :show-close="false" @open="open"
+      @close="close">
     <div class="controls">
       <div class="search">
         <div class="field-label">Search</div>
@@ -15,8 +15,7 @@
         <el-button :disabled="!searchTerm || !menuItem" @click="buttonHandler">Create</el-button>
       </div>
     </div>
-    <dm5-topic-list class="result" :topics="resultTopics" empty-text="No Match" v-if="searchTerm"
-      @topic-click="revealTopic">
+    <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" @topic-click="revealTopic">
     </dm5-topic-list>
   </el-dialog>
 </template>
@@ -36,7 +35,7 @@ export default {
   data () {
     return {
       searchTerm: '',
-      resultTopics: undefined,
+      resultTopics: [],
       menuItem: undefined
     }
   },
@@ -120,7 +119,7 @@ export default {
           this.resultTopics = topics
         })
       } else {
-        this.resultTopics = undefined
+        this.resultTopics = []
       }
     }
   },
@@ -150,7 +149,7 @@ export default {
   margin-left: 1em;
 }
 
-.search-widget .result {
+.search-widget .dm5-topic-list {
   margin-top: 1.5em;
 }
 </style>

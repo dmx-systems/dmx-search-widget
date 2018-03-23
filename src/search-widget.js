@@ -1,13 +1,17 @@
 const state = {
+
   visible: false,           // search widget visibility
+
   pos: undefined,           // search widget position in `model` and `render` coordinates
                             // (objects with 'x' and 'y' properties)
+
   extraMenuItems: [],       // Extra type menu items which require special instantiation logic.
+
   noSelect: false,          // Optional: if trueish the revealed topic will not be selected.
                             // Otherwise it will.
-  topicHandler: undefined   // Optional: an additional Vuex action (string) that is dispatched subsequently to
-                            // "revealTopic". Its payload will be the revealed topic.
-                            // If undefined no additional action is dispatched. ### FIXDOC
+
+  topicHandler: undefined   // Optional: a handler that is invoked subsequently to "revealTopic".
+                            // The revealed topic is passed.
 }
 
 const actions = {
