@@ -12,13 +12,13 @@
           <el-option value="-" disabled></el-option>
           <el-option v-for="item in extraMenuItems" :label="item.label" :value="item" :key="item.uri"></el-option>
         </el-select>
-        <el-button :disabled="!searchTerm || !menuItem" @click="buttonHandler">Create</el-button>
+        <el-button :disabled="!searchTerm || !menuItem" @click="create">Create</el-button>
       </div>
     </div>
     <div class="main">
       <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" @topic-click="revealTopic">
       </dm5-topic-list>
-      <component :is="optionsComp"></component>
+      <component :is="optionsComp" ref="optionsComp"></component>
     </div>
   </el-dialog>
 </template>
@@ -88,10 +88,10 @@ export default {
       this._revealTopic(topic)
     },
 
-    buttonHandler () {
+    create () {
       this.close()
       if (this.isExtraMenuItem) {
-        this.menuItem.create(this.searchTerm)
+        this.menuItem.create(this.searchTerm, this.$refs.optionsComp.$data)
       } else {
         this.createTopic()
       }
