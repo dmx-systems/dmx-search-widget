@@ -91,7 +91,7 @@ export default {
     create () {
       this.close()
       if (this.isExtraMenuItem) {
-        this.menuItem.create(this.searchTerm, this.$refs.optionsComp.$data)
+        this.createExtra()
       } else {
         this.createTopic()
       }
@@ -107,6 +107,11 @@ export default {
       }).catch(error => {
         console.error(error)
       })
+    },
+
+    createExtra () {
+      const optionsComp = this.$refs.optionsComp
+      this.menuItem.create(this.searchTerm, optionsComp && optionsComp.$data)
     },
 
     _revealTopic (topic) {
