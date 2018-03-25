@@ -2,9 +2,14 @@
 
 ## Version History
 
+**0.10** -- Mar 25, 2018
+
+* New concept: the extra menu items can provide a "Create Options Component" to solicit further data from the user before creating the topic.
+* Dependencies: `dm5-topic-list` replaces `el-table` as the result list component. Build size decreases by 100 KiB!
+
 **0.9** -- Mar 22, 2018
 
-* New option `topicHandler` replaces `auxAction`
+* New option `topicHandler` replaces `auxAction`. Allows the handler and the `openSearchWidget` call to exist in the same closure.
 
 **0.8** -- Jan 13, 2018
 
@@ -34,4 +39,4 @@
 
 ------------
 Jörg Richter  
-Mar 22, 2018
+Mar 25, 2018
