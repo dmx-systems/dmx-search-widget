@@ -1,30 +1,29 @@
 <template>
-  <el-dialog custom-class="search-widget" :visible="visible" :modal="false" :show-close="false" @open="open"
+  <el-dialog custom-class="dm5-search-widget" :visible="visible" :modal="false" :show-close="false" @open="open"
       @close="close">
-    <div class="controls">
-      <div class="search">
-        <div class="field-label">Search</div>
+    <el-tabs type="border-card">
+      <el-tab-pane label="Search" class="search">
         <el-input v-model="searchTerm"></el-input>
-      </div>
-      <div class="create">
+        <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" @topic-click="revealTopic">
+        </dm5-topic-list>
+      </el-tab-pane>
+      <el-tab-pane label="Create" class="create" :disabled="!searchTerm">
+        <div class="field-label">Topic Type</div>
         <el-select v-model="menuItem" value-key="uri">
           <el-option v-for="type in menuTopicTypes" :label="type.value" :value="type" :key="type.uri"></el-option>
           <el-option value="-" disabled></el-option>
           <el-option v-for="item in extraMenuItems" :label="item.label" :value="item" :key="item.uri"></el-option>
         </el-select>
-        <el-button :disabled="!searchTerm || !menuItem" @click="create">Create</el-button>
-      </div>
-    </div>
-    <div class="main">
-      <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" @topic-click="revealTopic">
-      </dm5-topic-list>
-      <component :is="optionsComp" ref="optionsComp"></component>
-    </div>
+        <span class="value">"{{searchTerm}}"</span>
+        <el-button :disabled="!menuItem" @click="create">Create</el-button>
+        <component :is="optionsComp" class="options" ref="optionsComp"></component>
+      </el-tab-pane>
+    </el-tabs>
   </el-dialog>
 </template>
 
 <script>
-import Vuex from 'vuex'
+import { mapState } from 'vuex'
 import dm5 from 'dm5'
 
 export default {
@@ -47,7 +46,7 @@ export default {
 
   computed: {
 
-    ...Vuex.mapState({
+    ...mapState({
       visible:        state => state.searchWidget.visible,
       pos:            state => state.searchWidget.pos,
       extraMenuItems: state => state.searchWidget.extraMenuItems,
@@ -72,7 +71,7 @@ export default {
 
     open () {
       // console.log('open')
-      var style = this.$el.querySelector('.el-dialog.search-widget').style
+      var style = this.$el.querySelector('.el-dialog.dm5-search-widget').style
       style.top  = this.pos.render.y + 'px'
       style.left = this.pos.render.x + 'px'
     },
@@ -104,8 +103,6 @@ export default {
       dm5.restClient.createTopic(topicModel).then(topic => {
         console.log(topic)
         this._revealTopic(topic)
-      }).catch(error => {
-        console.error(error)
       })
     },
 
@@ -146,30 +143,35 @@ export default {
 </script>
 
 <style>
-.el-dialog.search-widget {
-  margin: 0 !important;    /* reset el-dialog margin */
+.dm5-search-widget {
+  margin: 0 !important;     /* reset el-dialog margin for manual dialog positioning */
 }
 
-.search-widget .controls {
-  display: flex;
-  align-items: flex-end;
+.dm5-search-widget .el-dialog__header {
+  padding: 0;               /* was 20px 20px 10px */
 }
 
-.search-widget .controls .search {
-  flex: auto;
+.dm5-search-widget .el-dialog__body {
+  padding: 0;               /* was 15px due to overrides in App.vue */
 }
 
-.search-widget .controls .create {
-  display: flex;
-  margin-left: 1em;
+/* Restore the text color for disabled tab items for Element UI's "border-card" tabs style. */
+/* Note: with the "border-card" tabs style Element UI sets a specific color for .el-tabs__item. This rule overrides */
+/* the general color rule for disabled tab items due to higher specificity. Apparently this is a bug in Element UI. */
+.dm5-search-widget .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-disabled {
+  color: var(--color-text-disabled);
 }
 
-.search-widget .main {
-  display: flex;
+.dm5-search-widget .search .dm5-topic-list {
   margin-top: 1.5em;
 }
 
-.search-widget .main .dm5-topic-list {
-  flex: auto;
+.dm5-search-widget .create .value {
+  margin-left: 0.5em;
+  margin-right: 0.5em;
+}
+
+.dm5-search-widget .create .options {
+  margin-top: 1.5em;
 }
 </style>
