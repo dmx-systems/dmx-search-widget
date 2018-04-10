@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.11** -- Apr 10, 2018
+
+* 2-tab layout: "Search" and "Create"
+
 **0.10** -- Mar 25, 2018
 
 * New concept: the extra menu items can provide a "Create Options Component" to solicit further data from the user before creating the topic.
@@ -39,4 +43,4 @@
 
 ------------
 Jörg Richter  
-Mar 25, 2018
+Apr 10, 2018

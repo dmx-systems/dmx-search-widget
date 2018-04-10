@@ -15,7 +15,7 @@
           <el-option v-for="item in extraMenuItems" :label="item.label" :value="item" :key="item.uri"></el-option>
         </el-select>
         <span class="value">"{{searchTerm}}"</span>
-        <el-button :disabled="!menuItem" @click="create">Create</el-button>
+        <el-button type="primary" plain :disabled="!menuItem" @click="create">Create</el-button>
         <component :is="optionsComp" class="options" ref="optionsComp"></component>
       </el-tab-pane>
     </el-tabs>
