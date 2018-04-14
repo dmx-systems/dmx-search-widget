@@ -155,13 +155,6 @@ export default {
   padding: 0;               /* was 15px due to overrides in App.vue */
 }
 
-/* Restore the text color for disabled tab items for Element UI's "border-card" tabs style. */
-/* Note: with the "border-card" tabs style Element UI sets a specific color for .el-tabs__item. This rule overrides */
-/* the general color rule for disabled tab items due to higher specificity. Apparently this is a bug in Element UI. */
-.dm5-search-widget .el-tabs--border-card > .el-tabs__header .el-tabs__item.is-disabled {
-  color: var(--color-text-disabled);
-}
-
 .dm5-search-widget .search .dm5-topic-list {
   margin-top: 1.5em;
 }
