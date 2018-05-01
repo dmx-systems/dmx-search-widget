@@ -148,11 +148,11 @@ export default {
 }
 
 .dm5-search-widget .el-dialog__header {
-  padding: 0;               /* was 20px 20px 10px */
+  padding: 0 !important;    /* was 20px 20px 10px */
 }
 
 .dm5-search-widget .el-dialog__body {
-  padding: 0;               /* was 15px due to overrides in App.vue */
+  padding: 0 !important;    /* was 15px due to overrides in App.vue */
 }
 
 .dm5-search-widget .search .dm5-topic-list {
