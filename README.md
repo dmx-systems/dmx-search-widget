@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.12** -- May 1, 2018
+
+* Adapt Element UI overrides
+
 **0.11** -- Apr 10, 2018
 
 * 2-tab layout: "Search" and "Create"
@@ -43,4 +47,4 @@
 
 ------------
 Jörg Richter  
-Apr 10, 2018
+May 1, 2018
