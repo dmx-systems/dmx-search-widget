@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.13** -- Jul 31, 2018
+
+* Add GitLab CI/CD
+
 **0.12** -- May 1, 2018
 
 * Adapt Element UI overrides
@@ -47,4 +51,4 @@
 
 ------------
 Jörg Richter  
-May 1, 2018
+Jul 31, 2018
