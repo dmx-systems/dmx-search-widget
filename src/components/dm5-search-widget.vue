@@ -101,8 +101,9 @@ export default {
       const topicModel = topicType.newTopicModel(this.searchTerm)
       // console.log('createTopic', topicModel)
       dm5.restClient.createTopic(topicModel).then(topic => {
-        console.log(topic)
+        console.log('Created', topic)
         this._revealTopic(topic)
+        this.$store.dispatch('_processDirectives', topic.directives)
       })
     },
 
