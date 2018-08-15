@@ -103,13 +103,14 @@ export default {
       dm5.restClient.createTopic(topicModel).then(topic => {
         console.log('Created', topic)
         this._revealTopic(topic)
+        // TODO: decoupling. Don't dispatch into host application.
         this.$store.dispatch('_processDirectives', topic.directives)
       })
     },
 
     createExtra () {
       const optionsComp = this.$refs.optionsComp
-      this.menuItem.create(this.searchTerm, optionsComp && optionsComp.$data)
+      this.menuItem.create(this.searchTerm, optionsComp && optionsComp.$data, this.pos.model)
     },
 
     _revealTopic (topic) {
@@ -119,9 +120,7 @@ export default {
         pos: this.pos.model,
         select: !this.noSelect
       })
-      if (this.topicHandler) {
-        this.topicHandler(topic)
-      }
+      this.topicHandler && this.topicHandler(topic)
     }
   },
 
