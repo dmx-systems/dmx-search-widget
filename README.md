@@ -2,6 +2,11 @@
 
 ## Version History
 
+**0.14** -- Aug 18, 2018
+
+* Pass widget `pos` to extra menu item `create` callback
+* Fix: process directives on create-topic
+
 **0.13** -- Jul 31, 2018
 
 * Add GitLab CI/CD
@@ -51,4 +56,4 @@
 
 ------------
 Jörg Richter  
-Jul 31, 2018
+Aug 18, 2018
