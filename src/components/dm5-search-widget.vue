@@ -29,10 +29,16 @@ import dm5 from 'dm5'
 export default {
 
   created () {
-    this.$store.registerModule('searchWidget', require('../search-widget').default)
+    // console.log('dm5-search-widget created', this.visible)
   },
 
-  props: ['menuTopicTypes'],
+  props: {
+    visible:        {type: Boolean},
+    pos:            {type: Object},
+    options:        {type: Object},
+    menuTopicTypes: {type: Object},
+    extraMenuItems: {type: Array}
+  },
 
   data () {
     return {
@@ -45,14 +51,6 @@ export default {
   },
 
   computed: {
-
-    ...mapState({
-      visible:        state => state.searchWidget.visible,
-      pos:            state => state.searchWidget.pos,
-      extraMenuItems: state => state.searchWidget.extraMenuItems,
-      noSelect:       state => state.searchWidget.noSelect,
-      topicHandler:   state => state.searchWidget.topicHandler
-    }),
 
     searchQuery () {
       return this.searchTerm + '*'    // TODO
@@ -69,17 +67,28 @@ export default {
 
   methods: {
 
+    // TODO: drop it
     open () {
-      // console.log('open')
-      var style = this.$el.querySelector('.el-dialog.dm5-search-widget').style
-      style.top  = this.pos.render.y + 'px'
-      style.left = this.pos.render.x + 'px'
+      // console.log('open', this.pos)
     },
 
     close () {
       // FIXME: called twice when closing programmatically (through revealTopic())
       // console.log('close')
+      // TODO: decoupling. Don't dispatch into host application.
       this.$store.dispatch('closeSearchWidget')
+    },
+
+    /**
+     * Positions the dialog according to "pos" prop.
+     *
+     * Note: for positioning we can't use data binding in the template. The <el-dialog> element
+     * interpolates to the dialog's screen mask. The actual dialog is a child element of it.
+     */
+    position () {
+      var style = this.$el.querySelector('.el-dialog.dm5-search-widget').style
+      style.top  = this.pos.render.y + 'px'
+      style.left = this.pos.render.x + 'px'
     },
 
     revealTopic (topic) {
@@ -118,13 +127,14 @@ export default {
       this.$store.dispatch('revealTopic', {
         topic,
         pos: this.pos.model,
-        select: !this.noSelect
+        select: !(this.options && this.options.noSelect)
       })
-      this.topicHandler && this.topicHandler(topic)
+      this.options && this.options.topicHandler && this.options.topicHandler(topic)
     }
   },
 
   watch: {
+
     searchTerm () {
       if (this.searchTerm) {
         dm5.restClient.searchTopics(this.searchQuery).then(topics => {
@@ -133,6 +143,11 @@ export default {
       } else {
         this.resultTopics = []
       }
+    },
+
+    pos () {
+      // console.log('watch pos', this.pos)
+      this.position()
     }
   },
 
