@@ -1,6 +1,5 @@
 <template>
-  <el-dialog custom-class="dm5-search-widget" :visible="visible" :modal="false" :show-close="false" @open="open"
-      @close="close">
+  <el-dialog custom-class="dm5-search-widget" :visible="visible" :modal="false" :show-close="false" @close="close">
     <el-tabs type="border-card">
       <el-tab-pane label="Search" class="search">
         <el-input v-model="searchTerm"></el-input>
@@ -23,7 +22,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import dm5 from 'dm5'
 
 export default {
@@ -35,7 +33,6 @@ export default {
   props: {
     visible:        {type: Boolean},
     pos:            {type: Object},
-    options:        {type: Object},
     menuTopicTypes: {type: Object},
     extraMenuItems: {type: Array}
   },
@@ -67,16 +64,26 @@ export default {
 
   methods: {
 
-    // TODO: drop it
-    open () {
-      // console.log('open', this.pos)
+    revealTopic (topic) {
+      this.close()
+      this.$emit('topic-reveal', topic)
     },
 
-    close () {
-      // FIXME: called twice when closing programmatically (through revealTopic())
-      // console.log('close')
-      // TODO: decoupling. Don't dispatch into host application.
-      this.$store.dispatch('closeSearchWidget')
+    create () {
+      this.close()
+      if (this.isExtraMenuItem) {
+        const optionsComp = this.$refs.optionsComp
+        this.$emit('extra-create', {
+          extraItem: this.menuItem,
+          value:     this.searchTerm,
+          optionsData: optionsComp && optionsComp.$data
+        })
+      } else {
+        this.$emit('topic-create', {
+          topicType: this.menuItem,
+          value:     this.searchTerm
+        })
+      }
     },
 
     /**
@@ -91,45 +98,10 @@ export default {
       style.left = this.pos.render.x + 'px'
     },
 
-    revealTopic (topic) {
-      this.close()
-      this._revealTopic(topic)
-    },
-
-    create () {
-      this.close()
-      if (this.isExtraMenuItem) {
-        this.createExtra()
-      } else {
-        this.createTopic()
-      }
-    },
-
-    createTopic () {
-      const topicType = this.menuItem
-      const topicModel = topicType.newTopicModel(this.searchTerm)
-      // console.log('createTopic', topicModel)
-      dm5.restClient.createTopic(topicModel).then(topic => {
-        console.log('Created', topic)
-        this._revealTopic(topic)
-        // TODO: decoupling. Don't dispatch into host application.
-        this.$store.dispatch('_processDirectives', topic.directives)
-      })
-    },
-
-    createExtra () {
-      const optionsComp = this.$refs.optionsComp
-      this.menuItem.create(this.searchTerm, optionsComp && optionsComp.$data, this.pos.model)
-    },
-
-    _revealTopic (topic) {
-      // TODO: decoupling. Don't dispatch into host application.
-      this.$store.dispatch('revealTopic', {
-        topic,
-        pos: this.pos.model,
-        select: !(this.options && this.options.noSelect)
-      })
-      this.options && this.options.topicHandler && this.options.topicHandler(topic)
+    close () {
+      // console.log('close')
+      // FIXME: called twice when closing programmatically (revealTopic(), create())
+      this.$emit('close')
     }
   },
 
