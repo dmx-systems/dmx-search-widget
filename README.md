@@ -2,6 +2,17 @@
 
 ## Version History
 
+**0.15** -- Aug 22, 2018
+
+* Composability:
+    * The component emits events instead of dispatching into the host application. Events and their args:
+        * `topic-reveal`  topic
+        * `topic-create`  {topicType, value}
+        * `extra-create`  {extraItem, value, optionsData}
+        * `close`         -
+    * The component receives app state via props instead of maintaining a Vuex store module on its own.
+        * No Vuex dependency anymore
+
 **0.14** -- Aug 18, 2018
 
 * Pass widget `pos` to extra menu item `create` callback
@@ -56,4 +67,4 @@
 
 ------------
 Jörg Richter  
-Aug 18, 2018
+Aug 22, 2018
