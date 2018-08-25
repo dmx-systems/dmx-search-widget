@@ -6,7 +6,7 @@
         <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" @topic-click="revealTopic">
         </dm5-topic-list>
       </el-tab-pane>
-      <el-tab-pane label="Create" class="create" :disabled="!searchTerm">
+      <el-tab-pane label="Create" class="create" :disabled="!createEnabled || !searchTerm">
         <div class="field-label">Topic Type</div>
         <el-select v-model="menuItem" value-key="uri">
           <el-option v-for="type in menuTopicTypes" :label="type.value" :value="type" :key="type.uri"></el-option>
@@ -33,6 +33,7 @@ export default {
   props: {
     visible:        {type: Boolean},
     pos:            {type: Object},
+    createEnabled:  {type: Boolean},
     menuTopicTypes: {type: Object},
     extraMenuItems: {type: Array}
   },
