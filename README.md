@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.16** -- Sep 30, 2018
+
+* New component prop `createEnabled` controls weather the "Create" tab is enabled
+
 **0.15** -- Aug 22, 2018
 
 * Composability:
@@ -67,4 +71,4 @@
 
 ------------
 Jörg Richter  
-Aug 22, 2018
+Sep 30, 2018
