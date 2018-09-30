@@ -1,17 +1,17 @@
 <template>
-  <el-dialog custom-class="dm5-search-widget" :visible="visible" :modal="false" :show-close="false" @close="close">
+  <el-dialog custom-class="dm5-search-widget" :visible="visible_" :modal="false" :show-close="false" @close="close">
     <el-tabs type="border-card">
       <el-tab-pane label="Search" class="search">
         <el-input v-model="searchTerm"></el-input>
         <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" @topic-click="revealTopic">
         </dm5-topic-list>
       </el-tab-pane>
-      <el-tab-pane label="Create" class="create" :disabled="!createEnabled || !searchTerm">
+      <el-tab-pane label="Create" class="create" :disabled="!createEnabled_ || !searchTerm">
         <div class="field-label">Topic Type</div>
         <el-select v-model="menuItem" value-key="uri">
-          <el-option v-for="type in menuTopicTypes" :label="type.value" :value="type" :key="type.uri"></el-option>
+          <el-option v-for="type in menuTopicTypes_" :label="type.value" :value="type" :key="type.uri"></el-option>
           <el-option value="-" disabled></el-option>
-          <el-option v-for="item in extraMenuItems" :label="item.label" :value="item" :key="item.uri"></el-option>
+          <el-option v-for="item in extraMenuItems_" :label="item.label" :value="item" :key="item.uri"></el-option>
         </el-select>
         <span class="value">"{{searchTerm}}"</span>
         <el-button type="primary" plain :disabled="!menuItem" @click="create">Create</el-button>
@@ -27,7 +27,7 @@ import dm5 from 'dm5'
 export default {
 
   created () {
-    // console.log('dm5-search-widget created', this.visible)
+    // console.log('dm5-search-widget created', this.visible_)
   },
 
   props: {
@@ -42,9 +42,15 @@ export default {
     return {
       searchTerm: '',
       resultTopics: [],
-      menuItem: undefined   // Selected item of create menu.
+      menuItem: undefined,  // Selected item of create menu.
                             // Either a dm5.TopicType or an extra menu item (Object).
                             // Undefined if no item is selected.
+      // mirror props
+      visible_:        this.visible,
+      pos_:            this.pos,
+      createEnabled_:  this.createEnabled,
+      menuTopicTypes_: this.menuTopicTypes,
+      extraMenuItems_: this.extraMenuItems
     }
   },
 
@@ -60,6 +66,24 @@ export default {
 
     isExtraMenuItem () {
       return this.menuItem && this.menuItem.constructor.name === 'Object'
+    }
+  },
+
+  watch: {
+
+    searchTerm () {
+      if (this.searchTerm) {
+        dm5.restClient.searchTopics(this.searchQuery).then(topics => {
+          this.resultTopics = topics
+        })
+      } else {
+        this.resultTopics = []
+      }
+    },
+
+    pos_ () {
+      // console.log('watch pos_', this.pos_)
+      this.position()
     }
   },
 
@@ -88,39 +112,21 @@ export default {
     },
 
     /**
-     * Positions the dialog according to "pos" prop.
+     * Positions the dialog according to "pos_" data.
      *
      * Note: for positioning we can't use data binding in the template. The <el-dialog> element
      * interpolates to the dialog's screen mask. The actual dialog is a child element of it.
      */
     position () {
       var style = this.$el.querySelector('.el-dialog.dm5-search-widget').style
-      style.top  = this.pos.render.y + 'px'
-      style.left = this.pos.render.x + 'px'
+      style.top  = this.pos_.render.y + 'px'
+      style.left = this.pos_.render.x + 'px'
     },
 
     close () {
       // console.log('close')
       // FIXME: called twice when closing programmatically (revealTopic(), create())
       this.$emit('close')
-    }
-  },
-
-  watch: {
-
-    searchTerm () {
-      if (this.searchTerm) {
-        dm5.restClient.searchTopics(this.searchQuery).then(topics => {
-          this.resultTopics = topics
-        })
-      } else {
-        this.resultTopics = []
-      }
-    },
-
-    pos () {
-      // console.log('watch pos', this.pos)
-      this.position()
     }
   },
 
