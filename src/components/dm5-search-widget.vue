@@ -3,7 +3,8 @@
     <el-tabs type="border-card">
       <el-tab-pane label="Search" class="search">
         <el-input v-model="searchTerm"></el-input>
-        <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" @topic-click="revealTopic">
+        <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" :marker-ids="markerIds_"
+          @topic-click="revealTopic">
         </dm5-topic-list>
       </el-tab-pane>
       <el-tab-pane label="Create" class="create" :disabled="!createEnabled_ || !searchTerm">
@@ -31,11 +32,15 @@ export default {
   },
 
   props: {
-    visible:        {type: Boolean},
-    pos:            {type: Object},
-    createEnabled:  {type: Boolean},
-    menuTopicTypes: {type: Object},
-    extraMenuItems: {type: Array}
+    // dialog
+    visible: Boolean,
+    pos: Object,
+    // search-tab
+    markerIds: Array,           // Optional: IDs of topics to render as "marked" in result list
+    // create-tab
+    createEnabled: Boolean,
+    menuTopicTypes: Object,
+    extraMenuItems: Array
   },
 
   data () {
@@ -48,6 +53,7 @@ export default {
       // mirror props
       visible_:        this.visible,
       pos_:            this.pos,
+      markerIds_:      this.markerIds,
       createEnabled_:  this.createEnabled,
       menuTopicTypes_: this.menuTopicTypes,
       extraMenuItems_: this.extraMenuItems
