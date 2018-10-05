@@ -31,12 +31,16 @@ export default {
     // console.log('dm5-search-widget created', this.visible_)
   },
 
+  mounted () {
+    // console.log('dm5-search-widget mounted', this.visible_)
+  },
+
   props: {
     // dialog
     visible: Boolean,
     pos: Object,
     // search-tab
-    markerIds: Array,           // Optional: IDs of topics to render as "marked" in result list
+    markerIds: Array,         // Optional: IDs of topics to render as "marked" in result list
     // create-tab
     createEnabled: Boolean,
     menuTopicTypes: Object,
@@ -47,9 +51,9 @@ export default {
     return {
       searchTerm: '',
       resultTopics: [],
-      menuItem: undefined,  // Selected item of create menu.
-                            // Either a dm5.TopicType or an extra menu item (Object).
-                            // Undefined if no item is selected.
+      menuItem: undefined,    // Selected item of create menu.
+                              // Either a dm5.TopicType or an extra menu item (Object).
+                              // Undefined if no item is selected.
       // mirror props
       visible_:        this.visible,
       pos_:            this.pos,
@@ -78,12 +82,13 @@ export default {
   watch: {
 
     searchTerm () {
-      if (this.searchTerm) {
-        dm5.restClient.searchTopics(this.searchQuery).then(topics => {
-          this.resultTopics = topics
-        })
-      } else {
-        this.resultTopics = []
+      this.search()
+    },
+
+    visible_ () {
+      // console.log('watch visible_', this.visible_)
+      if (this.visible_) {
+        this.search()
       }
     },
 
@@ -94,6 +99,16 @@ export default {
   },
 
   methods: {
+
+    search () {
+      if (this.searchTerm) {
+        dm5.restClient.searchTopics(this.searchQuery).then(topics => {
+          this.resultTopics = topics
+        })
+      } else {
+        this.resultTopics = []
+      }
+    },
 
     revealTopic (topic) {
       this.close()
@@ -118,7 +133,7 @@ export default {
     },
 
     /**
-     * Positions the dialog according to "pos_" data.
+     * Syncs the dialog position with the "pos_" data.
      *
      * Note: for positioning we can't use data binding in the template. The <el-dialog> element
      * interpolates to the dialog's screen mask. The actual dialog is a child element of it.
