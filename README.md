@@ -2,6 +2,12 @@
 
 ## Version History
 
+**0.17** -- Oct 6, 2018
+
+* New component property `markerIds` allows rendering certain search result topics as "marked"
+* Component supports manual mounting in conjunction with manual data update ("props" are mirrored as "data")
+* Fix: update search result on show dialog
+
 **0.16** -- Sep 30, 2018
 
 * New component prop `createEnabled` controls weather the "Create" tab is enabled
@@ -71,4 +77,4 @@
 
 ------------
 Jörg Richter  
-Sep 30, 2018
+Oct 6, 2018
