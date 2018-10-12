@@ -1,24 +1,25 @@
 <template>
   <el-dialog custom-class="dm5-search-widget" :visible="visible_" :modal="false" :show-close="false" @close="close">
-    <el-tabs type="border-card">
-      <el-tab-pane label="Search" class="search">
-        <el-input v-model="searchTerm"></el-input>
-        <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" :marker-ids="markerIds_"
-          @topic-click="revealTopic">
-        </dm5-topic-list>
-      </el-tab-pane>
-      <el-tab-pane label="Create" class="create" :disabled="!createEnabled_ || !searchTerm">
-        <div class="field-label">Topic Type</div>
-        <el-select v-model="menuItem" value-key="uri">
-          <el-option v-for="type in menuTopicTypes_" :label="type.value" :value="type" :key="type.uri"></el-option>
-          <el-option value="-" disabled></el-option>
-          <el-option v-for="item in extraMenuItems_" :label="item.label" :value="item" :key="item.uri"></el-option>
-        </el-select>
-        <span class="value">"{{searchTerm}}"</span>
-        <el-button type="primary" plain :disabled="!menuItem" @click="create">Create</el-button>
-        <component :is="optionsComp" class="options" ref="optionsComp"></component>
-      </el-tab-pane>
-    </el-tabs>
+    <div class="search">
+      <div class="heading label">Search</div>
+      <el-input v-model="searchTerm"></el-input>
+      <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" :marker-ids="markerIds_"
+        @topic-click="revealTopic">
+      </dm5-topic-list>
+    </div>
+    <div class="create" v-if="createEnabled_">
+      <div class="heading label">Create</div>
+      <div class="field-label">Topic Type</div>
+      <el-select v-model="menuItem" value-key="uri" :disabled="!searchTerm">
+        <el-option v-for="type in menuTopicTypes_" :label="type.value" :value="type" :key="type.uri"></el-option>
+        <el-option value="-" disabled></el-option>
+        <el-option v-for="item in extraMenuItems_" :label="item.label" :value="item" :key="item.uri"></el-option>
+      </el-select>
+      <component :is="optionsComp" class="options" ref="optionsComp"></component>
+      <el-button class="create-button" type="primary" plain :disabled="!searchTerm || !menuItem" @click="create">
+        Create
+      </el-button>
+    </div>
   </el-dialog>
 </template>
 
@@ -162,24 +163,33 @@ export default {
   margin: 0 !important;     /* reset el-dialog margin for manual dialog positioning */
 }
 
-.dm5-search-widget .el-dialog__header {
-  padding: 0 !important;    /* was 20px 20px 10px */
+.dm5-search-widget .el-dialog__body {
+  display: flex;
 }
 
-.dm5-search-widget .el-dialog__body {
-  padding: 0 !important;    /* was 15px due to overrides in App.vue */
+.dm5-search-widget .heading {
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 1.5em;
+}
+
+.dm5-search-widget .search {
+  flex-grow: 1;
 }
 
 .dm5-search-widget .search .dm5-topic-list {
   margin-top: 1.5em;
 }
 
-.dm5-search-widget .create .value {
-  margin-left: 0.5em;
-  margin-right: 0.5em;
+.dm5-search-widget .create {
+  margin-left: 3em;
 }
 
 .dm5-search-widget .create .options {
+  margin-top: 1.5em;
+}
+
+.dm5-search-widget .create .create-button {
+  display: block;
   margin-top: 1.5em;
 }
 </style>
