@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.18** -- Oct 21, 2018
+
+* Return to no-tabs layout
+
 **0.17** -- Oct 6, 2018
 
 * New component property `markerIds` allows rendering certain search result topics as "marked"
@@ -77,4 +81,4 @@
 
 ------------
 Jörg Richter  
-Oct 6, 2018
+Oct 21, 2018
