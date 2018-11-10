@@ -101,7 +101,8 @@ export default {
 
   methods: {
 
-    search () {
+    search: dm5.utils.debounce(function () {
+      // console.log('search', this.searchTerm)
       if (this.searchTerm) {
         dm5.restClient.searchTopics(this.searchQuery).then(topics => {
           this.resultTopics = topics
@@ -109,7 +110,7 @@ export default {
       } else {
         this.resultTopics = []
       }
-    },
+    }, 300),
 
     revealTopic (topic) {
       this.close()
