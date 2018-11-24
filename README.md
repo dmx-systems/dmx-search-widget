@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.19** -- Nov 24, 2018
+
+* Improvement: debounce search requests
+
 **0.18** -- Oct 21, 2018
 
 * Return to no-tabs layout
@@ -81,4 +85,4 @@
 
 ------------
 Jörg Richter  
-Oct 21, 2018
+Nov 24, 2018

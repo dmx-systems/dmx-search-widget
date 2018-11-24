@@ -114,20 +114,20 @@ export default {
 
     revealTopic (topic) {
       this.close()
-      this.$emit('topic-reveal', topic)
+      this.$emit('topic-reveal', topic)     // TODO: include "pos" in arg?
     },
 
     create () {
       this.close()
       if (this.isExtraMenuItem) {
         const optionsComp = this.$refs.optionsComp
-        this.$emit('extra-create', {
+        this.$emit('extra-create', {        // TODO: include "pos" in arg?
           extraItem: this.menuItem,
           value:     this.searchTerm,
           optionsData: optionsComp && optionsComp.$data
         })
       } else {
-        this.$emit('topic-create', {
+        this.$emit('topic-create', {        // TODO: include "pos" in arg?
           topicType: this.menuItem,
           value:     this.searchTerm
         })
