@@ -18,7 +18,7 @@
 
 **0.16** -- Sep 30, 2018
 
-* New component prop `createEnabled` controls weather the "Create" tab is enabled
+* New component prop `createEnabled` controls whether the "Create" tab is enabled
 
 **0.15** -- Aug 22, 2018
 

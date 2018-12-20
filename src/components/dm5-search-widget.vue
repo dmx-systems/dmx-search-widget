@@ -11,9 +11,12 @@
       <div class="heading label">Create</div>
       <div class="field-label">Topic Type</div>
       <el-select v-model="menuItem" value-key="uri" :disabled="!searchTerm">
-        <el-option v-for="type in menuTopicTypes_" :label="type.value" :value="type" :key="type.uri"></el-option>
-        <el-option value="-" disabled></el-option>
-        <el-option v-for="item in extraMenuItems_" :label="item.label" :value="item" :key="item.uri"></el-option>
+        <el-option-group>
+          <el-option v-for="type in menuTopicTypes_" :label="type.value" :value="type" :key="type.uri"></el-option>
+        </el-option-group>
+        <el-option-group label="DMX">
+          <el-option v-for="item in extraMenuItems_" :label="item.label" :value="item" :key="item.uri"></el-option>
+        </el-option-group>
       </el-select>
       <component :is="optionsComp" class="options" ref="optionsComp"></component>
       <el-button class="create-button" type="primary" plain :disabled="!searchTerm || !menuItem" @click="create">
