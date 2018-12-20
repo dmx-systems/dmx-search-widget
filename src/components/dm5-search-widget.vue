@@ -10,15 +10,20 @@
     <div class="create" v-if="createEnabled_">
       <div class="heading label">Create</div>
       <div class="field-label">Topic Type</div>
+      <!-- "Create" menu -->
       <el-select v-model="menuItem" value-key="uri" :disabled="!searchTerm">
         <el-option-group>
-          <el-option v-for="type in menuTopicTypes_" :label="type.value" :value="type" :key="type.uri"></el-option>
+          <el-option v-for="type in menuTopicTypes_" :label="type.value" :value="type" :key="type.uri">
+            <span class="fa icon">{{icon(type)}}</span><span>{{type.value}}</span>
+          </el-option>
         </el-option-group>
         <el-option-group label="DMX">
           <el-option v-for="item in extraMenuItems_" :label="item.label" :value="item" :key="item.uri"></el-option>
         </el-option-group>
       </el-select>
+      <!-- "Create" options -->
       <component :is="optionsComp" class="options" ref="optionsComp"></component>
+      <!-- "Create" button -->
       <el-button class="create-button" type="primary" plain :disabled="!searchTerm || !menuItem" @click="create">
         Create
       </el-button>
@@ -137,6 +142,10 @@ export default {
       }
     },
 
+    icon (type) {
+      return type.getTypeIcon()
+    },
+
     /**
      * Syncs the dialog position with the "pos_" data.
      *
@@ -195,5 +204,11 @@ export default {
 .dm5-search-widget .create .create-button {
   display: block;
   margin-top: 1.5em;
+}
+
+/* Note: el-selects are <body> mounted */
+.el-select-dropdown__item .icon {
+  color: var(--color-topic-icon);
+  margin-right: var(--icon-spacing);
 }
 </style>
