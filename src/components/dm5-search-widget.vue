@@ -47,7 +47,7 @@ export default {
     markerIds: Array,         // Optional: IDs of topics to render as "marked" in result list
     // create-tab
     createEnabled: Boolean,
-    menuTopicTypes: Object,
+    menuTopicTypes: Array,
     extraMenuItems: Array
   },
 
