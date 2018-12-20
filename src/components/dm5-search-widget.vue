@@ -14,7 +14,7 @@
       <el-select v-model="menuItem" value-key="uri" :disabled="!searchTerm">
         <el-option-group>
           <el-option v-for="type in menuTopicTypes_" :label="type.value" :value="type" :key="type.uri">
-            <span class="fa icon">{{icon(type)}}</span><span>{{type.value}}</span>
+            <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
           </el-option>
         </el-option-group>
         <el-option-group label="DMX">
@@ -142,10 +142,6 @@ export default {
       }
     },
 
-    icon (type) {
-      return type.getTypeIcon()
-    },
-
     /**
      * Syncs the dialog position with the "pos_" data.
      *
@@ -206,7 +202,7 @@ export default {
   margin-top: 1.5em;
 }
 
-/* Note: el-selects are <body> mounted */
+/* Note: this is a global rule as el-selects are <body> mounted */
 .el-select-dropdown__item .icon {
   color: var(--color-topic-icon);
   margin-right: var(--icon-spacing);
