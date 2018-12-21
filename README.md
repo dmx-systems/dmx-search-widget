@@ -2,6 +2,12 @@
 
 ## Version History
 
+**0.20** -- Dec 21, 2018
+
+* Show type icons in "Create" menu
+* Revise "Create" menu (option groups)
+* Retype component property `menu-topic-types` to Array (formerly Object) to support sort order
+
 **0.19** -- Nov 24, 2018
 
 * Improvement: debounce search requests
@@ -85,4 +91,4 @@
 
 ------------
 Jörg Richter  
-Nov 24, 2018
+Dec 21, 2018
