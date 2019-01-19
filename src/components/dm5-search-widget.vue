@@ -18,7 +18,9 @@
           </el-option>
         </el-option-group>
         <el-option-group label="DMX">
-          <el-option v-for="item in extraMenuItems_" :label="item.label" :value="item" :key="item.uri"></el-option>
+          <el-option v-for="item in extraMenuItems_" :label="type(item).value" :value="item" :key="item.uri">
+            <span class="fa icon">{{type(item).icon}}</span><span>{{type(item).value}}</span>
+          </el-option>
         </el-option-group>
       </el-select>
       <!-- "Create" options -->
@@ -48,9 +50,9 @@ export default {
     // dialog
     visible: Boolean,
     pos: Object,
-    // search-tab
+    // search panel
     markerIds: Array,         // Optional: IDs of topics to render as "marked" in result list
-    // create-tab
+    // create panel
     createEnabled: Boolean,
     menuTopicTypes: Array,
     extraMenuItems: Array
@@ -125,6 +127,10 @@ export default {
       this.$emit('topic-reveal', topic)     // TODO: include "pos" in arg?
     },
 
+    type (extraItem) {
+      return dm5.typeCache.getTopicType(extraItem.uri)
+    },
+
     create () {
       this.close()
       if (this.isExtraMenuItem) {
@@ -143,7 +149,7 @@ export default {
     },
 
     /**
-     * Syncs the dialog position with the "pos_" data.
+     * Syncs the dialog position with the "pos_" state.
      *
      * Note: for positioning we can't use data binding in the template. The <el-dialog> element
      * interpolates to the dialog's screen mask. The actual dialog is a child element of it.
@@ -200,11 +206,5 @@ export default {
 .dm5-search-widget .create .create-button {
   display: block;
   margin-top: 1.5em;
-}
-
-/* Note: this is a global rule as el-selects are <body> mounted */
-.el-select-dropdown__item .icon {
-  color: var(--color-topic-icon);
-  margin-right: var(--icon-spacing);
 }
 </style>
