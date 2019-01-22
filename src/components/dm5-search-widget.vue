@@ -2,7 +2,7 @@
   <el-dialog custom-class="dm5-search-widget" :visible="visible_" :modal="false" :show-close="false" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
-      <el-input v-model="searchTerm" ref="input"></el-input>
+      <el-input v-model="searchTerm" ref="input" @keyup.native.enter="clickCreate"></el-input>
       <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" :marker-ids="markerIds_"
         @topic-click="revealTopic">
       </dm5-topic-list>
@@ -26,8 +26,8 @@
       <!-- "Create" options -->
       <component :is="optionsComp" class="options" ref="optionsComp"></component>
       <!-- "Create" button -->
-      <el-button class="create-button" type="primary" plain :disabled="!searchTerm || !menuItem" @click="create">
-        Create
+      <el-button class="create-button" ref="create" type="primary" plain :disabled="!searchTerm || !menuItem"
+        @click="create">Create
       </el-button>
     </div>
   </el-dialog>
@@ -147,6 +147,11 @@ export default {
           value:     this.searchTerm
         })
       }
+    },
+
+    clickCreate () {
+      const button = this.$refs.create
+      button && button.$el.click()
     },
 
     /**
