@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="dm5-search-widget" :visible="visible_" :modal="false" @open="open" @close="close">
+  <el-dialog custom-class="dm5-search-widget" :visible="visible_" @open="open" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
       <el-input v-model="searchTerm" ref="input" @keyup.native.enter="clickCreate"></el-input>
