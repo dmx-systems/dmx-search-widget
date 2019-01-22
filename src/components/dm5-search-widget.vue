@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="dm5-search-widget" :visible="visible_" :modal="false" :show-close="false" @close="close">
+  <el-dialog custom-class="dm5-search-widget" :visible="visible_" :modal="false" @open="open" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
       <el-input v-model="searchTerm" ref="input" @keyup.native.enter="clickCreate"></el-input>
@@ -96,24 +96,19 @@ export default {
       this.search()
     },
 
-    visible_ () {
-      // console.log('watch visible_', this.visible_)
-      if (this.visible_) {
-        this.$nextTick(() => this.$refs.input.select())
-        this.search()
-      }
-    },
-
     pos_ () {
-      // console.log('watch pos_', this.pos_)
       this.position()
     }
   },
 
   methods: {
 
+    open () {
+      this.$nextTick(() => this.$refs.input.select())
+      this.search()
+    },
+
     search: dm5.utils.debounce(function () {
-      // console.log('search', this.searchTerm)
       if (this.searchTerm) {
         dm5.restClient.searchTopics(this.searchQuery).then(topics => {
           this.resultTopics = topics
