@@ -2,7 +2,7 @@
   <el-dialog custom-class="dm5-search-widget" :visible="visible_" :modal="false" :show-close="false" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
-      <el-input v-model="searchTerm"></el-input>
+      <el-input v-model="searchTerm" ref="input"></el-input>
       <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" :marker-ids="markerIds_"
         @topic-click="revealTopic">
       </dm5-topic-list>
@@ -99,6 +99,7 @@ export default {
     visible_ () {
       // console.log('watch visible_', this.visible_)
       if (this.visible_) {
+        this.$nextTick(() => this.$refs.input.select())
         this.search()
       }
     },
