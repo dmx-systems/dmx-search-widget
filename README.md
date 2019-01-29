@@ -2,6 +2,16 @@
 
 ## Version History
 
+**0.21** -- Jan 29, 2019
+
+* Improvements:
+    * Show icons for the "Create" menu's special items
+    * When opening the dialog the search field content is selected
+    * Pressing Return in search field triggers "Create" button
+    * The dialog is modal; pressing ESC closes it
+    * The dialog has a close box
+* Change license to `GPL-3.0-or-later`
+
 **0.20** -- Dec 21, 2018
 
 * Show type icons in "Create" menu
@@ -91,4 +101,4 @@
 
 ------------
 Jörg Richter  
-Dec 21, 2018
+Jan 29, 2019
