@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.22** -- Apr 1, 2019
+
+* Chore: bump dependency version numbers to snapshots
+
 **0.21** -- Jan 29, 2019
 
 * Improvements:
@@ -101,4 +105,4 @@
 
 ------------
 Jörg Richter  
-Jan 29, 2019
+Apr 1, 2019
