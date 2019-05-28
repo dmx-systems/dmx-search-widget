@@ -1,6 +1,6 @@
 {
   "name": "dm5-search-widget",
-  "version": "0.23.0",
+  "version": "0.24.0",
   "description": "The DeepaMehta 5 search/create widget as a composable GUI component",
   "author": "Jörg Richter <jri@dmx.berlin>",
   "license": "GPL-3.0-or-later",
@@ -10,6 +10,6 @@
     "url": "https://github.com/jri/dm5-search-widget.git"
   },
   "dependencies": {
-    "dm5-topic-list": "https://github.com/jri/dm5-topic-list.git"
+    "dm5-topic-list": "0.12.0"
   }
 }

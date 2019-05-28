@@ -2,9 +2,13 @@
 
 ## Version History
 
+**0.24** -- May 28, 2019
+
+* HTML topics in search results are rendered, instead displaying source (due to upgraded `dm5-topic-list` dependency)
+
 **0.23** -- Apr 22, 2019
 
-* Chore: lock `dm5` dependencies (for releasing DMX-5.0-beta.2)
+* Chore: lock `dm5-` dependencies (for releasing DMX-5.0-beta.2)
 
 **0.22** -- Apr 1, 2019
 
@@ -109,4 +113,4 @@
 
 ------------
 Jörg Richter  
-Apr 22, 2019
+May 28, 2019
