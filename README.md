@@ -4,7 +4,7 @@
 
 **0.24** -- May 28, 2019
 
-* HTML topics in search results are rendered, instead displaying source (due to upgraded `dm5-topic-list` dependency)
+* Improvement: HTML topics in search results are rendered, instead displaying source (due to upgraded `dm5-topic-list` dependency)
 
 **0.23** -- Apr 22, 2019
 

@@ -110,7 +110,7 @@ export default {
 
     search: dm5.utils.debounce(function () {
       if (this.searchTerm) {
-        dm5.restClient.searchTopics(this.searchQuery).then(topics => {
+        dm5.restClient.queryTopicsFulltext(this.searchQuery).then(topics => {
           this.resultTopics = topics
         })
       } else {
