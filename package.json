@@ -1,15 +1,15 @@
 {
   "name": "dm5-search-widget",
-  "version": "0.24.0",
+  "version": "0.25.0",
   "description": "The DeepaMehta 5 search/create widget as a composable GUI component",
   "author": "Jörg Richter <jri@dmx.berlin>",
-  "license": "GPL-3.0-or-later",
+  "license": "AGPL-3.0",
   "main": "src/components/dm5-search-widget.vue",
   "repository": {
     "type": "git",
     "url": "https://github.com/jri/dm5-search-widget.git"
   },
   "dependencies": {
-    "dm5-topic-list": "0.12.0"
+    "dm5-topic-list": "0.13.0"
   }
 }

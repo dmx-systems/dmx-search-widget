@@ -2,6 +2,12 @@
 
 ## Version History
 
+**0.25** -- Jul 22, 2019
+
+* Chore:
+    * Adapt to `dm5` library (`searchTopics()` -> `queryTopicsFulltext()`)
+    * Change license to `AGPL-3.0`
+
 **0.24** -- May 28, 2019
 
 * Improvement: HTML topics in search results are rendered, instead displaying source (due to upgraded `dm5-topic-list` dependency)
@@ -113,4 +119,4 @@
 
 ------------
 Jörg Richter  
-May 28, 2019
+Jul 22, 2019
