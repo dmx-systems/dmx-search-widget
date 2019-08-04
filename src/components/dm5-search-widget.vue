@@ -77,7 +77,7 @@ export default {
 
   computed: {
 
-    searchQuery () {
+    query () {
       return this.searchTerm + '*'    // TODO
     },
 
@@ -110,8 +110,13 @@ export default {
 
     search: dm5.utils.debounce(function () {
       if (this.searchTerm) {
-        dm5.restClient.queryTopicsFulltext(this.searchQuery).then(queryResult => {
-          this.resultTopics = queryResult.topics
+        dm5.restClient.queryTopicsFulltext(this.query).then(result => {
+          if (result.query === this.query) {
+            this.resultTopics = result.topics
+          } else {
+            console.log(`Ignoring ${result.topics.length} result topics of query "${result.query}"` +
+              ` (current query is "${this.query}")`)
+          }
         })
       } else {
         this.resultTopics = []
