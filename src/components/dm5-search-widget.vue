@@ -2,8 +2,8 @@
   <el-dialog custom-class="dm5-search-widget" :visible="visible_" @open="open" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
-      <el-input v-model="searchTerm" ref="input" @keyup.native.enter="clickCreate"></el-input>
-      <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="searchTerm" :marker-ids="markerIds_"
+      <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
+      <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="input" :marker-ids="markerIds_"
         @topic-click="revealTopic">
       </dm5-topic-list>
     </div>
@@ -11,7 +11,7 @@
       <div class="heading label">Create</div>
       <div class="field-label">Topic Type</div>
       <!-- "Create" menu -->
-      <el-select v-model="menuItem" value-key="uri" :disabled="!searchTerm">
+      <el-select v-model="menuItem" value-key="uri" :disabled="!input">
         <el-option-group>
           <el-option v-for="type in menuTopicTypes_" :label="type.value" :value="type" :key="type.uri">
             <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
@@ -26,7 +26,7 @@
       <!-- "Create" options -->
       <component :is="optionsComp" class="options" ref="optionsComp"></component>
       <!-- "Create" button -->
-      <el-button class="create-button" ref="create" type="primary" plain :disabled="!searchTerm || !menuItem"
+      <el-button class="create-button" ref="create" type="primary" plain :disabled="!input || !menuItem"
         @click="create">Create
       </el-button>
     </div>
@@ -60,7 +60,7 @@ export default {
 
   data () {
     return {
-      searchTerm: '',
+      input: '',
       resultTopics: [],
       menuItem: undefined,    // Selected item of create menu.
                               // Either a dm5.TopicType or an extra menu item (Object).
@@ -78,7 +78,13 @@ export default {
   computed: {
 
     query () {
-      return this.searchTerm + '*'    // TODO
+      let query = this.input.trim().split(/ +/).join(' AND ')
+      if (query.length === 1) {     // don't search single letter
+        query = ''
+      } else if (query && !this.input.endsWith(' ')) {
+        query += '*'
+      }
+      return query
     },
 
     optionsComp () {
@@ -92,7 +98,7 @@ export default {
 
   watch: {
 
-    searchTerm () {
+    input () {
       this.search()
     },
 
@@ -109,7 +115,8 @@ export default {
     },
 
     search: dm5.utils.debounce(function () {
-      if (this.searchTerm) {
+      console.log('query', this.query)
+      if (this.query) {
         dm5.restClient.queryTopicsFulltext(this.query).then(result => {
           if (result.query === this.query) {
             this.resultTopics = result.topics
@@ -138,13 +145,13 @@ export default {
         const optionsComp = this.$refs.optionsComp
         this.$emit('extra-create', {        // TODO: include "pos" in arg?
           extraItem: this.menuItem,
-          value:     this.searchTerm,
+          value:     this.input,
           optionsData: optionsComp && optionsComp.$data
         })
       } else {
         this.$emit('topic-create', {        // TODO: include "pos" in arg?
           topicType: this.menuItem,
-          value:     this.searchTerm
+          value:     this.input
         })
       }
     },
