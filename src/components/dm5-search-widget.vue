@@ -36,6 +36,10 @@
 <script>
 import dm5 from 'dm5'
 
+const luceneSymbols = [
+  '+', '-', '&&', '||', '!', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '\\', 'AND', 'OR', 'NOT'
+]
+
 export default {
 
   created () {
@@ -78,13 +82,20 @@ export default {
   computed: {
 
     query () {
-      let query = this.input.trim().split(/ +/).join(' AND ')
-      if (query.length === 1) {     // don't search single letter
-        query = ''
-      } else if (query && !this.input.endsWith(' ')) {
-        query += '*'
+      let query = this.input.trim()
+      if (!this.containsLuceneSymbol) {
+        query = query.split(/ +/).join(' AND ')
+        if (query.length === 1) {     // don't search single character
+          query = ''
+        } else if (query && !this.input.endsWith(' ')) {
+          query += '*'
+        }
       }
       return query
+    },
+
+    containsLuceneSymbol () {
+      return luceneSymbols.some(symbol => this.input.includes(symbol))
     },
 
     optionsComp () {
@@ -115,7 +126,7 @@ export default {
     },
 
     search: dm5.utils.debounce(function () {
-      console.log('query', this.query)
+      console.log('query', this.query, this.containsLuceneSymbol)
       if (this.query) {
         dm5.restClient.queryTopicsFulltext(this.query).then(result => {
           if (result.query === this.query) {
@@ -124,6 +135,9 @@ export default {
             console.log(`Ignoring ${result.topics.length} result topics of query "${result.query}"` +
               ` (current query is "${this.query}")`)
           }
+        }).catch(e => {
+          console.warn(`Query "${this.query}" failed`)
+          this.resultTopics = []
         })
       } else {
         this.resultTopics = []
