@@ -109,6 +109,7 @@ export default {
     },
 
     search: dm5.utils.debounce(function () {
+      // compare to dm5-text-field.vue (module dm5-object-renderer)
       console.log('query', this.query)
       if (this.query) {
         dm5.restClient.queryTopicsFulltext(this.query).then(result => {

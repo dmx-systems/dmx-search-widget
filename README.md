@@ -2,6 +2,15 @@
 
 ## Version History
 
+**0.26** -- Aug 16, 2019
+
+* Improvements:
+    * Combine search terms via AND (instead OR)
+    * Don't perform single character search
+    * Don't transform user input if it contains Lucene special symbol
+* Fixes:
+    * Do not show out-of-date search result
+
 **0.25** -- Jul 22, 2019
 
 * Chore:
@@ -119,4 +128,4 @@
 
 ------------
 Jörg Richter  
-Jul 22, 2019
+Aug 16, 2019
