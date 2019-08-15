@@ -36,10 +36,6 @@
 <script>
 import dm5 from 'dm5'
 
-const luceneSymbols = [
-  '+', '-', '&&', '||', '!', '(', ')', '{', '}', '[', ']', '^', '"', '~', '*', '?', ':', '\\', 'AND', 'OR', 'NOT'
-]
-
 export default {
 
   created () {
@@ -82,20 +78,7 @@ export default {
   computed: {
 
     query () {
-      let query = this.input.trim()
-      if (!this.containsLuceneSymbol) {
-        query = query.split(/ +/).join(' AND ')
-        if (query.length === 1) {     // don't search single character
-          query = ''
-        } else if (query && !this.input.endsWith(' ')) {
-          query += '*'
-        }
-      }
-      return query
-    },
-
-    containsLuceneSymbol () {
-      return luceneSymbols.some(symbol => this.input.includes(symbol))
+      return dm5.utils.fulltextQuery(this.input)
     },
 
     optionsComp () {
@@ -126,7 +109,7 @@ export default {
     },
 
     search: dm5.utils.debounce(function () {
-      console.log('query', this.query, this.containsLuceneSymbol)
+      console.log('query', this.query)
       if (this.query) {
         dm5.restClient.queryTopicsFulltext(this.query).then(result => {
           if (result.query === this.query) {
