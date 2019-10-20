@@ -2,7 +2,20 @@
   <el-dialog custom-class="dm5-search-widget" :visible="visible_" @open="open" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
-      <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
+      <div id="settings">
+        <div>
+          <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
+          <el-checkbox v-model="check1">Search selected types only</el-checkbox>
+          <el-checkbox v-model="check2" :style="advancedStyle">Search in child topics as well</el-checkbox>
+        </div>
+        <div :style="advancedStyle">
+          <ul>
+            <li>Topic Type 1</li>
+            <li>Topic Type 2</li>
+            <li>Topic Type 3</li>
+          </ul>
+        </div>
+      </div>
       <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="input" :marker-ids="markerIds_"
         @topic-click="revealTopic">
       </dm5-topic-list>
@@ -61,6 +74,8 @@ export default {
   data () {
     return {
       input: '',
+      check1: false,
+      check2: false,
       resultTopics: [],
       menuItem: undefined,    // Selected item of create menu.
                               // Either a dm5.TopicType or an extra menu item (Object).
@@ -83,6 +98,12 @@ export default {
 
     query () {
       return dm5.utils.fulltextQuery(this.input)
+    },
+
+    advancedStyle () {
+      return {
+        display: this.check1 ? 'initial' : 'none'
+      }
     },
 
     optionsComp () {
@@ -203,7 +224,44 @@ export default {
 }
 
 .dm5-search-widget .search {
-  flex-grow: 1;
+  flex: auto;
+}
+
+.dm5-search-widget .search #settings {
+  display: flex;
+}
+
+.dm5-search-widget .search #settings > div {
+  flex: auto;
+}
+
+.dm5-search-widget .search #settings > div:nth-of-type(2) {
+  border: 1px solid var(--border-color);
+  margin-left: 1em;
+}
+
+.dm5-search-widget .search #settings .el-checkbox {
+  display: block;
+}
+
+.dm5-search-widget .search #settings .el-checkbox:nth-of-type(1) {
+  margin-top: 0.8em;
+}
+
+.dm5-search-widget .search #settings .el-checkbox:nth-of-type(2) {
+  margin-left: 1.6em;
+}
+
+.dm5-search-widget .search #settings .el-checkbox__label {
+  font-size: var(--label-font-size);
+  color:     var(--label-color);
+}
+
+.dm5-search-widget .search #settings ul {
+  list-style-type: none;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
 }
 
 .dm5-search-widget .search .dm5-topic-list {
