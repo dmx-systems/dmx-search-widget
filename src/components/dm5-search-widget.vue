@@ -1,21 +1,18 @@
 <template>
-  <el-dialog custom-class="dm5-search-widget" :visible="visible_" @open="open" @close="close">
+  <el-dialog custom-class="dm5-search-widget" :visible="visible_" width="60%" @open="open" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
-      <div id="settings">
-        <div>
-          <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
-          <el-checkbox v-model="check1">Search selected types only</el-checkbox>
-          <el-checkbox v-model="check2" :style="advancedStyle">Search in child topics as well</el-checkbox>
-        </div>
-        <div :style="advancedStyle">
-          <ul>
-            <li>Topic Type 1</li>
-            <li>Topic Type 2</li>
-            <li>Topic Type 3</li>
-          </ul>
-        </div>
+      <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
+      <div id="type-select">
+        <el-checkbox v-model="check1">Selected type only</el-checkbox>
+        <!-- "Search" menu -->
+        <el-select v-model="searchTopicType" value-key="uri" :disabled="!check1">
+          <el-option v-for="type in menuTopicTypes_" :label="type.value" :value="type" :key="type.uri">
+            <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
+          </el-option>
+        </el-select>
       </div>
+      <el-checkbox v-model="check2" :style="advancedStyle">Search child topics</el-checkbox>
       <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="input" :marker-ids="markerIds_"
         @topic-click="revealTopic">
       </dm5-topic-list>
@@ -52,20 +49,20 @@ import dm5 from 'dm5'
 export default {
 
   created () {
-    // console.log('dm5-search-widget created', this.visible_)
+    // console.log('dm5-search-widget created', this.visible_, this.menuTopicTypes_)
   },
 
   mounted () {
-    // console.log('dm5-search-widget mounted', this.visible_)
+    // console.log('dm5-search-widget mounted', this.visible_, this.menuTopicTypes_)
   },
 
   props: {
     // dialog
     visible: Boolean,
     pos: Object,
-    // search panel
+    // search
     markerIds: Array,         // Optional: IDs of topics to render as "marked" in result list
-    // create panel
+    // create
     createEnabled: Boolean,
     menuTopicTypes: Array,
     extraMenuItems: Array
@@ -73,10 +70,13 @@ export default {
 
   data () {
     return {
+      // search
       input: '',
       check1: false,
       check2: false,
+      searchTopicType: undefined,
       resultTopics: [],
+      // create
       menuItem: undefined,    // Selected item of create menu.
                               // Either a dm5.TopicType or an extra menu item (Object).
                               // Undefined if no item is selected.
@@ -227,45 +227,22 @@ export default {
   flex: auto;
 }
 
-.dm5-search-widget .search #settings {
-  display: flex;
-}
-
-.dm5-search-widget .search #settings > div {
-  flex: auto;
-}
-
-.dm5-search-widget .search #settings > div:nth-of-type(2) {
-  border: 1px solid var(--border-color);
-  margin-left: 1em;
-}
-
-.dm5-search-widget .search #settings .el-checkbox {
-  display: block;
-}
-
-.dm5-search-widget .search #settings .el-checkbox:nth-of-type(1) {
+.dm5-search-widget .search #type-select {
   margin-top: 0.8em;
+  margin-bottom: 0.2em;
 }
 
-.dm5-search-widget .search #settings .el-checkbox:nth-of-type(2) {
-  margin-left: 1.6em;
+.dm5-search-widget .search #type-select .el-select {
+  margin-left: 0.4em;
 }
 
-.dm5-search-widget .search #settings .el-checkbox__label {
+.dm5-search-widget .search .el-checkbox__label {
   font-size: var(--label-font-size);
   color:     var(--label-color);
 }
 
-.dm5-search-widget .search #settings ul {
-  list-style-type: none;
-  line-height: 1.5;
-  margin: 0;
-  padding: 0;
-}
-
 .dm5-search-widget .search .dm5-topic-list {
-  margin-top: 1.5em;
+  margin-top: 2em;
 }
 
 .dm5-search-widget .create {
