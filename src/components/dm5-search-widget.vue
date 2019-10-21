@@ -41,7 +41,7 @@
         @click="create">Create
       </el-button>
     </div>
-    <dm5-type-dialog :visible="typeDialogVisible" :searchTopicTypes="searchTopicTypes" @close="closeTypeDialog">
+    <dm5-type-dialog :visible="typeDialogVisible" :checkedTopicTypes="searchTopicTypes" @close="closeTypeDialog">
     </dm5-type-dialog>
   </el-dialog>
 </template>

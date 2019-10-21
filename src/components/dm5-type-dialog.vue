@@ -1,6 +1,6 @@
 <template>
   <el-dialog custom-class="dm5-type-dialog" :visible="visible" append-to-body @close="close">
-    <el-checkbox v-for="type in types" :value="checked(type)" :key="type.uri">
+    <el-checkbox v-for="type in types" :value="checked(type)" :key="type.uri" @input="input(type, $event)">
       <span>{{type.value}}</span><span class="fa icon">{{type.icon}}</span>
     </el-checkbox>
   </el-dialog>
@@ -13,7 +13,7 @@ export default {
 
   props: {
     visible: Boolean,
-    searchTopicTypes: Array
+    checkedTopicTypes: Array
   },
 
   computed: {
@@ -26,7 +26,18 @@ export default {
   methods: {
 
     checked (type) {
-      return this.searchTopicTypes.some(_type => _type.uri === type.uri)
+      return this.checkedTopicTypes.some(_type => _type.uri === type.uri)
+    },
+
+    input (type, checked) {
+      // console.log('input', type.uri, checked)
+      if (checked) {
+        this.checkedTopicTypes.push(type)
+        this.checkedTopicTypes.sort((tt1, tt2) => tt1.value.localeCompare(tt2.value))
+      } else {
+        const i = this.checkedTopicTypes.findIndex(_type => _type.uri === type.uri)
+        this.checkedTopicTypes.splice(i, 1)
+      }
     },
 
     close () {
