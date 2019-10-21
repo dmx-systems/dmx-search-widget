@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="dm5-search-widget" :visible="visible_" width="60%" @open="open" @close="close">
+  <el-dialog custom-class="dm5-search-widget" :visible="visible_" width="66%" @open="open" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
       <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
@@ -7,10 +7,11 @@
         <el-checkbox v-model="check1">Selected type only</el-checkbox>
         <!-- "Search" menu -->
         <el-select v-model="searchTopicType" value-key="uri" :disabled="!check1">
-          <el-option v-for="type in menuTopicTypes_" :label="type.value" :value="type" :key="type.uri">
+          <el-option v-for="type in searchTopicTypes" :label="type.value" :value="type" :key="type.uri">
             <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
           </el-option>
         </el-select>
+        <el-button class="fa fa-cog" :disabled="!check1" @click="openTypeDialog"></el-button>
       </div>
       <el-checkbox v-model="check2" :style="advancedStyle">Search child topics</el-checkbox>
       <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="input" :marker-ids="markerIds_"
@@ -40,6 +41,8 @@
         @click="create">Create
       </el-button>
     </div>
+    <dm5-type-dialog :visible="typeDialogVisible" :searchTopicTypes="searchTopicTypes" @close="closeTypeDialog">
+    </dm5-type-dialog>
   </el-dialog>
 </template>
 
@@ -49,11 +52,11 @@ import dm5 from 'dm5'
 export default {
 
   created () {
-    // console.log('dm5-search-widget created', this.visible_, this.menuTopicTypes_)
+    // console.log('dm5-search-widget created', this.visible_, this.menuTopicTypes)
   },
 
   mounted () {
-    // console.log('dm5-search-widget mounted', this.visible_, this.menuTopicTypes_)
+    // console.log('dm5-search-widget mounted', this.visible_, this.menuTopicTypes)
   },
 
   props: {
@@ -74,7 +77,9 @@ export default {
       input: '',
       check1: false,
       check2: false,
-      searchTopicType: undefined,
+      searchTopicTypes: undefined,  // types listed in search menu
+      searchTopicType: undefined,   // selected type in search menu
+      typeDialogVisible: false,
       resultTopics: [],
       // create
       menuItem: undefined,    // Selected item of create menu.
@@ -123,6 +128,12 @@ export default {
 
     pos_ () {
       this.position()
+    },
+
+    menuTopicTypes_ () {
+      if (!this.searchTopicTypes) {
+        this.searchTopicTypes = this.menuTopicTypes_
+      }
     }
   },
 
@@ -131,6 +142,14 @@ export default {
     open () {
       this.$nextTick(() => this.$refs.input.select())
       this.search()
+    },
+
+    openTypeDialog () {
+      this.typeDialogVisible = true
+    },
+
+    closeTypeDialog () {
+      this.typeDialogVisible = false
     },
 
     search: dm5.utils.debounce(function () {
@@ -204,7 +223,8 @@ export default {
   },
 
   components: {
-    'dm5-topic-list': require('dm5-topic-list').default
+    'dm5-topic-list':  require('dm5-topic-list').default,
+    'dm5-type-dialog': require('./dm5-type-dialog').default
   }
 }
 </script>
