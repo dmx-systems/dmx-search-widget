@@ -4,7 +4,7 @@
       <div class="heading label">Search</div>
       <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
       <div id="type-select">
-        <el-checkbox v-model="check1">Selected type only</el-checkbox>
+        <el-checkbox v-model="check1">Search selected topic type only</el-checkbox>
         <!-- "Search" menu -->
         <el-select v-model="searchTopicType" value-key="uri" :disabled="!check1">
           <el-option-group>
@@ -172,7 +172,9 @@ export default {
       // compare to dm5-text-field.vue (module dm5-object-renderer)
       console.log('query', this.query)
       if (this.query) {
-        dm5.restClient.queryTopicsFulltext(this.query).then(result => {
+        // Note: if checkbox is unchecked undefined must be passed to REST client (instead of false)
+        const topicTypeUri = this.check1 && this.searchTopicType && this.searchTopicType.uri || undefined
+        dm5.restClient.queryTopicsFulltext(this.query, topicTypeUri, this.check2).then(result => {
           if (result.query === this.query) {
             this.resultTopics = result.topics
           } else {
