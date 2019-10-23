@@ -4,7 +4,7 @@
       <div class="heading label">Search</div>
       <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
       <div id="type-select">
-        <el-checkbox v-model="check1">Search selected topic type only</el-checkbox>
+        <el-checkbox v-model="check1">Search only selected type</el-checkbox>
         <!-- "Search" menu -->
         <el-select v-model="searchTopicType" value-key="uri" :disabled="!check1">
           <el-option-group>
@@ -127,9 +127,9 @@ export default {
 
   watch: {
 
-    input () {
-      this.search()
-    },
+    input ()  {this.search()},
+    check1 () {this.search()},
+    check2 () {this.search()},
 
     pos_ () {
       this.position()
@@ -149,6 +149,7 @@ export default {
         this.openTypeDialog()
       } else {
         this.prevSearchTopicType = this.searchTopicType
+        this.search()
       }
     }
   },
