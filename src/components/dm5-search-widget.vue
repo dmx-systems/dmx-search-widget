@@ -17,7 +17,7 @@
           </el-option-group>
         </el-select>
       </div>
-      <el-checkbox v-model="check2" :style="advancedStyle">Search child topics</el-checkbox>
+      <el-checkbox v-model="check2" :disabled="!check1">Search child topics</el-checkbox>
       <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="input" :marker-ids="markerIds_"
         @topic-click="revealTopic">
       </dm5-topic-list>
@@ -110,12 +110,6 @@ export default {
       return dm5.utils.fulltextQuery(this.input)
     },
 
-    advancedStyle () {
-      return {
-        display: this.check1 ? 'initial' : 'none'
-      }
-    },
-
     optionsComp () {
       return this.isExtraMenuItem && this.menuItem.optionsComp
     },
@@ -171,7 +165,7 @@ export default {
 
     search: dm5.utils.debounce(function () {
       // compare to dm5-text-field.vue (module dm5-object-renderer)
-      console.log('query', this.query)
+      console.log('query', this.query, this.check1, this.searchTopicType && this.searchTopicType.uri, this.check2)
       if (this.query) {
         // Note: if checkbox is unchecked undefined must be passed to REST client (instead of false)
         const topicTypeUri = this.check1 && this.searchTopicType && this.searchTopicType.uri || undefined
