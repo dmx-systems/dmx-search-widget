@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="dm5-search-widget" :visible="visible_" width="66%" @open="open" @close="close">
+  <el-dialog custom-class="dm5-search-widget" :visible="visible_" width="66%" @opened="opened" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
       <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
@@ -106,6 +106,11 @@ export default {
       return this.input.trim()
     },
 
+    topicTypeUri () {
+      // Note: if checkbox is unchecked undefined must be passed to REST client (instead of false)
+      return this.check1 && this.searchTopicType && this.searchTopicType.uri || undefined
+    },
+
     query () {
       return dm5.utils.fulltextQuery(this.input)
     },
@@ -130,8 +135,8 @@ export default {
     },
 
     menuTopicTypes_ () {
-      // Initially the "search" types are the same as the "create" types.
-      // At component instantiation the "create" types are not known yet.
+      // Set the initial "search" types the same as the "create" types.
+      // Note: at component instantiation the "create" types are not known yet.
       if (!this.searchTopicTypes) {
         this.searchTopicTypes = this.menuTopicTypes_
       }
@@ -150,8 +155,8 @@ export default {
 
   methods: {
 
-    open () {
-      this.$nextTick(() => this.$refs.input.select())
+    opened () {
+      this.$refs.input.select()
       this.search()
     },
 
@@ -165,25 +170,31 @@ export default {
 
     search: dm5.utils.debounce(function () {
       // compare to dm5-text-field.vue (module dm5-object-renderer)
-      console.log('query', this.query, this.check1, this.searchTopicType && this.searchTopicType.uri, this.check2)
+      console.log('query', this.query, this.topicTypeUri, this.check2)
       if (this.query) {
-        // Note: if checkbox is unchecked undefined must be passed to REST client (instead of false)
-        const topicTypeUri = this.check1 && this.searchTopicType && this.searchTopicType.uri || undefined
-        dm5.restClient.queryTopicsFulltext(this.query, topicTypeUri, this.check2).then(result => {
-          if (result.query === this.query) {
+        dm5.restClient.queryTopicsFulltext(this.query, this.topicTypeUri, this.check2).then(result => {
+          if (this.isResultUptodate(result)) {
             this.resultTopics = result.topics
-          } else {
-            console.log(`Ignoring ${result.topics.length} result topics of query "${result.query}"` +
-              ` (current query is "${this.query}")`)
           }
         }).catch(e => {
-          console.warn(`Query "${this.query}" failed`)
+          console.warn(`Query "${this.query}" failed (${e})`)
           this.resultTopics = []
         })
       } else {
         this.resultTopics = []
       }
     }, 300),
+
+    isResultUptodate (result) {
+      if (result.query === this.query &&
+          result.topicTypeUri === this.topicTypeUri &&
+          result.searchChildTopics === this.check2) {
+        return true
+      }
+      console.log("Ignoring " + result.topics.length + " result topics of query \"" + result.query + "\" (" +
+        result.topicTypeUri + ", " + result.searchChildTopics + "), current query is \"" + this.query + "\" (" +
+        this.topicTypeUri + ", " + this.check2 + ")")
+    },
 
     revealTopic (topic) {
       this.close()
