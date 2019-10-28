@@ -45,7 +45,8 @@
         @click="create">Create
       </el-button>
     </div>
-    <dm5-type-dialog :visible="typeDialogVisible" :checkedTopicTypes="searchTopicTypes" @close="closeTypeDialog">
+    <dm5-type-dialog :visible="typeDialogVisible" :checkedTopicTypes="searchTopicTypes" @close="closeTypeDialog"
+      @checked="checked" @unchecked="unchecked">
     </dm5-type-dialog>
   </el-dialog>
 </template>
@@ -144,11 +145,13 @@ export default {
 
     searchTopicType () {
       if (this.searchTopicType === "customize") {
-        this.searchTopicType = this.prevSearchTopicType
+        this.searchTopicType = this.prevSearchTopicType             // Note: retriggers this watcher
         this.openTypeDialog()
       } else {
-        this.prevSearchTopicType = this.searchTopicType
-        this.search()
+        if (this.searchTopicType !== this.prevSearchTopicType) {    // ignore if retriggered through "customize"
+          this.prevSearchTopicType = this.searchTopicType
+          this.search()
+        }
       }
     }
   },
@@ -168,9 +171,25 @@ export default {
       this.typeDialogVisible = false
     },
 
+    checked (type) {
+      // console.log('checked', type)
+      this.searchTopicTypes.push(type)
+      this.searchTopicTypes.sort((tt1, tt2) => tt1.value.localeCompare(tt2.value))
+    },
+
+    unchecked (type) {
+      // console.log('unchecked', type)
+      const i = this.searchTopicTypes.findIndex(_type => _type.uri === type.uri)
+      this.searchTopicTypes.splice(i, 1)
+      // reset selection when selected type is no longer in type list
+      if (type.uri === this.topicTypeUri) {
+        this.searchTopicType = undefined
+      }
+    },
+
     search: dm5.utils.debounce(function () {
       // compare to dm5-text-field.vue (module dm5-object-renderer)
-      console.log('query', this.query, this.topicTypeUri, this.check2)
+      console.log('search', this.query, this.topicTypeUri, this.check2)
       if (this.query) {
         dm5.restClient.queryTopicsFulltext(this.query, this.topicTypeUri, this.check2).then(result => {
           if (this.isResultUptodate(result)) {

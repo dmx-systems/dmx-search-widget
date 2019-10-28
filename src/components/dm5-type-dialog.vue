@@ -32,13 +32,7 @@ export default {
 
     input (type, checked) {
       // console.log('input', type.uri, checked)
-      if (checked) {
-        this.checkedTopicTypes.push(type)
-        this.checkedTopicTypes.sort((tt1, tt2) => tt1.value.localeCompare(tt2.value))
-      } else {
-        const i = this.checkedTopicTypes.findIndex(_type => _type.uri === type.uri)
-        this.checkedTopicTypes.splice(i, 1)
-      }
+      this.$emit(checked ? 'checked' : 'unchecked', type)
     },
 
     close () {
