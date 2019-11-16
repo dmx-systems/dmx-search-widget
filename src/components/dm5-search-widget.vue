@@ -67,7 +67,6 @@ export default {
   props: {
     // dialog
     visible: Boolean,
-    pos: Object,
     // search
     markerIds: Array,         // Optional: IDs of topics to render as "marked" in result list
     // create
@@ -93,7 +92,6 @@ export default {
                               // Undefined if no item is selected.
       // mirror props
       visible_:        this.visible,
-      pos_:            this.pos,
       markerIds_:      this.markerIds,
       createEnabled_:  this.createEnabled,
       menuTopicTypes_: this.menuTopicTypes,
@@ -130,10 +128,6 @@ export default {
     input ()  {this.search()},
     check1 () {this.search()},
     check2 () {this.search()},
-
-    pos_ () {
-      this.position()
-    },
 
     menuTopicTypes_ () {
       // Set the initial "search" types the same as the "create" types.
@@ -189,7 +183,7 @@ export default {
 
     search: dm5.utils.debounce(function () {
       // compare to dm5-text-field.vue (module dm5-object-renderer)
-      console.log('search', this.query, this.topicTypeUri, this.check2)
+      // console.log('search', this.query, this.topicTypeUri, this.check2)
       if (this.query) {
         dm5.restClient.queryTopicsFulltext(this.query, this.topicTypeUri, this.check2).then(result => {
           if (this.isResultUptodate(result)) {
@@ -217,7 +211,7 @@ export default {
 
     revealTopic (topic) {
       this.close()
-      this.$emit('topic-reveal', topic)     // TODO: include "pos" in arg?
+      this.$emit('topic-reveal', topic)
     },
 
     type (extraItem) {
@@ -228,13 +222,13 @@ export default {
       this.close()
       if (this.isExtraMenuItem) {
         const optionsComp = this.$refs.optionsComp
-        this.$emit('extra-create', {        // TODO: include "pos" in arg?
+        this.$emit('extra-create', {
           extraItem: this.menuItem,
           value:     this.trimmedInput,
           optionsData: optionsComp && optionsComp.$data
         })
       } else {
-        this.$emit('topic-create', {        // TODO: include "pos" in arg?
+        this.$emit('topic-create', {
           topicType: this.menuItem,
           value:     this.trimmedInput
         })
@@ -244,18 +238,6 @@ export default {
     clickCreate () {
       const button = this.$refs.create
       button && button.$el.click()
-    },
-
-    /**
-     * Syncs the dialog position with the "pos_" state.
-     *
-     * Note: for positioning we can't use data binding in the template. The <el-dialog> element
-     * interpolates to the dialog's screen mask. The actual dialog is a child element of it.
-     */
-    position () {
-      var style = this.$el.querySelector('.el-dialog.dm5-search-widget').style
-      style.top  = this.pos_.render.y + 'px'
-      style.left = this.pos_.render.x + 'px'
     },
 
     close () {
@@ -273,10 +255,6 @@ export default {
 </script>
 
 <style>
-.dm5-search-widget {
-  margin: 0 !important;     /* reset el-dialog margin for manual dialog positioning */
-}
-
 .dm5-search-widget .el-dialog__body {
   display: flex;
 }
