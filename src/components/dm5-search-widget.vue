@@ -125,6 +125,10 @@ export default {
 
   watch: {
 
+    // needed when instantiated via template
+    visible ()        {this.visible_        = this.visible},
+    menuTopicTypes () {this.menuTopicTypes_ = this.menuTopicTypes},
+
     input ()  {this.search()},
     check1 () {this.search()},
     check2 () {this.search()},
