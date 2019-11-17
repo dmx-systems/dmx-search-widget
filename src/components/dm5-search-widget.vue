@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="dm5-search-widget" :visible="visible_" width="66%" @opened="opened" @close="close">
+  <el-dialog custom-class="dm5-search-widget" :visible="visible_" :width="width" @opened="opened" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
       <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
@@ -67,6 +67,7 @@ export default {
   props: {
     // dialog
     visible: Boolean,
+    width: {type: String, default: '66%'},
     // search
     markerIds: Array,         // Optional: IDs of topics to render as "marked" in result list
     // create
@@ -128,6 +129,7 @@ export default {
     // needed when instantiated via template
     visible ()        {this.visible_        = this.visible},
     menuTopicTypes () {this.menuTopicTypes_ = this.menuTopicTypes},
+    // FIXME: add watchers for the remaining props?
 
     input ()  {this.search()},
     check1 () {this.search()},
