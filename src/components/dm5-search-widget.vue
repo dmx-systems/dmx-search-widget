@@ -71,8 +71,8 @@ export default {
     // search
     markerIds: Array,         // Optional: IDs of topics to render as "marked" in result list
     // create
-    createEnabled: Boolean,
-    menuTopicTypes: Array,
+    createEnabled: Boolean,   // whether the create-panel is rendered
+    menuTopicTypes: Array,    // types listed in create menu (array of dm5.TopicType) // TODO: rename "createTopicTypes"
     extraMenuItems: Array
   },
 
@@ -128,6 +128,7 @@ export default {
 
     // needed when instantiated via template
     visible ()        {this.visible_        = this.visible},
+    createEnabled ()  {this.createEnabled_  = this.createEnabled},
     menuTopicTypes () {this.menuTopicTypes_ = this.menuTopicTypes},
     // FIXME: add watchers for the remaining props?
 
