@@ -2,6 +2,17 @@
 
 ## Version History
 
+**0.27** -- Nov 22, 2019
+
+* Feature: Advanced Search
+    * Restrict search result to certain topic type
+        * Customizable type menu
+    * Optionally include child topics in search
+* Improvements:
+    * Drop `pos` component prop; dialog opens at standard position
+        * Original click position is still used for revealed/created topic placement
+    * Trim user input before create
+
 **0.26** -- Aug 16, 2019
 
 * Improvements:
@@ -128,4 +139,4 @@
 
 ------------
 Jörg Richter  
-Aug 16, 2019
+Nov 22, 2019
