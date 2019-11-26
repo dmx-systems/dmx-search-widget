@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="dm5-search-widget" :visible="visible_" width="66%" @opened="opened" @close="close">
+  <el-dialog :custom-class="customClass" :visible="visible_" :width="width" @opened="opened" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
       <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
@@ -67,16 +67,24 @@ export default {
   props: {
     // dialog
     visible: Boolean,
+    width: {type: String, default: '66%'},
+    layout: {                 // Optional: 'row' (default) or 'column'.
+      type: String,           // If 'column' the create panel is rendered *below* the search panel.
+      default: 'row',
+      validator: layout => ['row', 'column'].includes(layout)
+    },
     // search
     markerIds: Array,         // Optional: IDs of topics to render as "marked" in result list
     // create
-    createEnabled: Boolean,
-    menuTopicTypes: Array,
+    createEnabled: Boolean,   // whether the create-panel is rendered
+    menuTopicTypes: Array,    // types listed in create menu (array of dm5.TopicType) // TODO: rename "createTopicTypes"
     extraMenuItems: Array
   },
 
   data () {
     return {
+      // dialog
+      customClass: `dm5-search-widget ${this.layout}`,
       // search
       input: '',
       check1: false,
@@ -124,6 +132,12 @@ export default {
   },
 
   watch: {
+
+    // needed when instantiated via template
+    visible ()        {this.visible_        = this.visible},
+    createEnabled ()  {this.createEnabled_  = this.createEnabled},
+    menuTopicTypes () {this.menuTopicTypes_ = this.menuTopicTypes},
+    // FIXME: add watchers for the remaining props?
 
     input ()  {this.search()},
     check1 () {this.search()},
@@ -259,6 +273,10 @@ export default {
   display: flex;
 }
 
+.dm5-search-widget.column .el-dialog__body {
+  flex-direction: column;
+}
+
 .dm5-search-widget .heading {
   border-bottom: 1px solid var(--border-color);
   margin-bottom: 1.5em;
@@ -286,8 +304,12 @@ export default {
   margin-top: 2em;
 }
 
-.dm5-search-widget .create {
+.dm5-search-widget.row .create {
   margin-left: 3em;
+}
+
+.dm5-search-widget.column .create {
+  margin-top: 3em;
 }
 
 .dm5-search-widget .create .options {
