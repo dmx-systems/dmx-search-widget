@@ -2,6 +2,10 @@
 
 ## Version History
 
+**0.28** -- Mar 30, 2020
+
+* Mobile friendly layout (optional)
+
 **0.27** -- Nov 22, 2019
 
 * Feature: Advanced Search
@@ -139,4 +143,4 @@
 
 ------------
 Jörg Richter  
-Nov 22, 2019
+Mar 30, 2020
