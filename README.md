@@ -4,7 +4,11 @@
 
 **0.28** -- Mar 30, 2020
 
-* Mobile friendly layout (optional)
+* Improvements:
+    * Mobile friendly layout (optional):
+        * Add `layout` attr to control search/create panel layout
+        * Add `width` attr to control dialog width
+    * Supports declarative component instantiation
 
 **0.27** -- Nov 22, 2019
 

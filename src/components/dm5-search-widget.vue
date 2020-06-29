@@ -33,7 +33,8 @@
           </el-option>
         </el-option-group>
         <el-option-group label="DMX">
-          <el-option v-for="item in extraMenuItems_" :label="type(item).value" :value="item" :key="item.uri">
+          <el-option v-for="item in extraMenuItems_" :label="type(item).value" :value="item" :key="item.uri"
+              :disabled="disabled(item)">
             <span class="fa icon">{{type(item).icon}}</span><span>{{type(item).value}}</span>
           </el-option>
         </el-option-group>
@@ -103,7 +104,9 @@ export default {
       markerIds_:      this.markerIds,
       createEnabled_:  this.createEnabled,
       menuTopicTypes_: this.menuTopicTypes,
-      extraMenuItems_: this.extraMenuItems
+      extraMenuItems_: this.extraMenuItems,
+      //
+      isAdmin: false
     }
   },
 
@@ -169,6 +172,7 @@ export default {
     opened () {
       this.$refs.input.select()
       this.search()
+      dm5.isAdmin().then(isAdmin => this.isAdmin = isAdmin)
     },
 
     openTypeDialog () {
@@ -230,6 +234,11 @@ export default {
 
     type (extraItem) {
       return dm5.typeCache.getTopicType(extraItem.uri)
+    },
+
+    disabled (extraItem) {
+      // TODO: add extension point. Move logic to AccessControl module.
+      return extraItem.uri === 'dmx.accesscontrol.user_account' && !this.isAdmin
     },
 
     create () {
