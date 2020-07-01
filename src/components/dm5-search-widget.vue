@@ -19,7 +19,7 @@
       </div>
       <el-checkbox v-model="check2" :disabled="!check1">Search child topics</el-checkbox>
       <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="input" :marker-ids="markerIds_"
-        @topic-click="revealTopic">
+        @topic-click="topicClick" @icon-click="iconClick">
       </dm5-topic-list>
     </div>
     <div class="create" v-if="createEnabled_">
@@ -227,9 +227,14 @@ export default {
         this.topicTypeUri + ", " + this.check2 + ")")
     },
 
-    revealTopic (topic) {
+    topicClick (topic) {
+      this.$emit('topic-click', topic)
       this.close()
-      this.$emit('topic-reveal', topic)
+    },
+
+    iconClick (topic) {
+      this.$emit('icon-click', topic)
+      // leave dialog open # TODO?
     },
 
     type (extraItem) {
@@ -265,7 +270,7 @@ export default {
 
     close () {
       // console.log('close')
-      // FIXME: called twice when closing programmatically (revealTopic(), create())
+      // FIXME: called twice when closing programmatically (topicClick(), create())
       this.$emit('close')
     }
   },
