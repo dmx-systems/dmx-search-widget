@@ -172,7 +172,14 @@ export default {
     opened () {
       this.$refs.input.select()
       this.search()
-      dm5.isAdmin().then(isAdmin => this.isAdmin = isAdmin)
+      // update isAdmin state
+      dm5.isAdmin().then(isAdmin => {
+        this.isAdmin = isAdmin
+        // create menu: remove selection if item is disabled meanwhile
+        if (this.menuItem && this.disabled(this.menuItem)) {
+          this.menuItem = undefined
+        }
+      })
     },
 
     openTypeDialog () {
