@@ -32,6 +32,11 @@
             <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
           </el-option>
         </el-option-group>
+        <el-option-group label="Topicmap Types">
+          <el-option v-for="maptype in topicmapTypes" :label="maptype.name" :value="maptype" :key="maptype.uri">
+            <span class="fa icon">{{type(maptype).icon}}</span><span>{{maptype.name}}</span>
+          </el-option>
+        </el-option-group>
         <el-option-group label="DMX">
           <el-option v-for="item in extraMenuItems_" :label="type(item).value" :value="item" :key="item.uri"
               :disabled="disabled(item)">
@@ -79,6 +84,7 @@ export default {
     // create
     createEnabled: Boolean,   // whether the create-panel is rendered
     menuTopicTypes: Array,    // types listed in create menu (array of dm5.TopicType) // TODO: rename "createTopicTypes"
+    topicmapTypes: Array,     // topicmap types listed in create menu
     extraMenuItems: Array
   },
 
@@ -126,11 +132,15 @@ export default {
     },
 
     optionsComp () {
-      return this.isExtraMenuItem && this.menuItem.optionsComp
+      return (this.isTopicmapType || this.isExtraMenuItem) && this.menuItem.optionsComp
+    },
+
+    isTopicmapType () {
+      return this.menuItem && this.menuItem.renderer
     },
 
     isExtraMenuItem () {
-      return this.menuItem && this.menuItem.constructor.name === 'Object'
+      return this.menuItem && this.menuItem.create
     }
   },
 
@@ -229,9 +239,9 @@ export default {
           result.searchChildTopics === this.check2) {
         return true
       }
-      console.log("Ignoring " + result.topics.length + " result topics of query \"" + result.query + "\" (" +
+      /* console.log("Ignoring " + result.topics.length + " result topics of query \"" + result.query + "\" (" +
         result.topicTypeUri + ", " + result.searchChildTopics + "), current query is \"" + this.query + "\" (" +
-        this.topicTypeUri + ", " + this.check2 + ")")
+        this.topicTypeUri + ", " + this.check2 + ")") */
     },
 
     topicClick (topic) {
@@ -254,13 +264,19 @@ export default {
     },
 
     create () {
-      this.close()
-      if (this.isExtraMenuItem) {
-        const optionsComp = this.$refs.optionsComp
+      const optionsComp = this.$refs.optionsComp
+      const optionsData = optionsComp && optionsComp.$data
+      if (this.isTopicmapType) {
+        this.$emit('topicmap-create', {
+          name:            this.trimmedInput,
+          topicmapTypeUri: this.menuItem.uri,
+          optionsData
+        })
+      } else if (this.isExtraMenuItem) {
         this.$emit('extra-create', {
           extraItem: this.menuItem,
           value:     this.trimmedInput,
-          optionsData: optionsComp && optionsComp.$data
+          optionsData
         })
       } else {
         this.$emit('topic-create', {
@@ -268,6 +284,7 @@ export default {
           value:     this.trimmedInput
         })
       }
+      this.close()
     },
 
     clickCreate () {
