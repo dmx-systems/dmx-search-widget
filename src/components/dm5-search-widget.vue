@@ -32,7 +32,7 @@
             <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
           </el-option>
         </el-option-group>
-        <el-option-group label="Topicmap Types">
+        <el-option-group label="View">
           <el-option v-for="maptype in topicmapTypes" :label="maptype.name" :value="maptype" :key="maptype.uri">
             <span class="fa icon">{{type(maptype).icon}}</span><span>{{maptype.name}}</span>
           </el-option>
