@@ -270,7 +270,7 @@ export default {
         this.$emit('topicmap-create', {
           name:            this.trimmedInput,
           topicmapTypeUri: this.menuItem.uri,
-          optionsData
+          viewProps:       optionsData
         })
       } else if (this.isExtraMenuItem) {
         this.$emit('extra-create', {
