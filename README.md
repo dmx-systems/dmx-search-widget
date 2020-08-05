@@ -1,6 +1,17 @@
-# DeepaMehta 5 search/create widget
+# DMX 5 search/create widget
 
 ## Version History
+
+**1.0** -- Aug 5, 2020
+
+* Improvements:
+    * "Create" menu: list all maptypes top-level
+    * Split event `topic-reveal` into `topic-click` and `icon-click`
+* Fixes:
+    * Only admins can create user accounts
+    * "Create" menu: remove selection if item is disabled meanwhile
+* Chore:
+    * Rename this package `dm5-search-widget` -> `dmx-search-widget`
 
 **0.28** -- Mar 30, 2020
 
@@ -147,4 +158,4 @@
 
 ------------
 Jörg Richter  
-Mar 30, 2020
+Aug 5, 2020
