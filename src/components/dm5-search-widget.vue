@@ -28,7 +28,7 @@
       <!-- "Create" menu -->
       <el-select v-model="menuItem" value-key="uri" :disabled="!input">
         <el-option-group>
-          <el-option v-for="type in menuTopicTypes_" :label="type.value" :value="type" :key="type.uri">
+          <el-option v-for="type in createTopicTypes_" :label="type.value" :value="type" :key="type.uri">
             <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
           </el-option>
         </el-option-group>
@@ -63,11 +63,11 @@ import dm5 from 'dmx-api'
 export default {
 
   created () {
-    // console.log('dm5-search-widget created', this.visible_, this.menuTopicTypes)
+    // console.log('dm5-search-widget created', this.visible_, this.createTopicTypes)
   },
 
   mounted () {
-    // console.log('dm5-search-widget mounted', this.visible_, this.menuTopicTypes)
+    // console.log('dm5-search-widget mounted', this.visible_, this.createTopicTypes)
   },
 
   props: {
@@ -83,7 +83,7 @@ export default {
     markerIds: Array,         // Optional: IDs of topics to render as "marked" in result list
     // create
     createEnabled: Boolean,   // whether the create-panel is rendered
-    menuTopicTypes: Array,    // types listed in create menu (array of dm5.TopicType) // TODO: rename "createTopicTypes"
+    createTopicTypes: Array,  // types listed in create menu (array of dm5.TopicType)
     topicmapTypes: Array,     // topicmap types listed in create menu
     extraMenuItems: Array
   },
@@ -106,11 +106,11 @@ export default {
                               // Either a dm5.TopicType or an extra menu item (Object).
                               // Undefined if no item is selected.
       // mirror props
-      visible_:        this.visible,
-      markerIds_:      this.markerIds,
-      createEnabled_:  this.createEnabled,
-      menuTopicTypes_: this.menuTopicTypes,
-      extraMenuItems_: this.extraMenuItems,
+      visible_:          this.visible,
+      markerIds_:        this.markerIds,
+      createEnabled_:    this.createEnabled,
+      createTopicTypes_: this.createTopicTypes,
+      extraMenuItems_:   this.extraMenuItems,
       //
       isAdmin: false
     }
@@ -147,20 +147,20 @@ export default {
   watch: {
 
     // needed when instantiated via template
-    visible ()        {this.visible_        = this.visible},
-    createEnabled ()  {this.createEnabled_  = this.createEnabled},
-    menuTopicTypes () {this.menuTopicTypes_ = this.menuTopicTypes},
+    visible ()          {this.visible_          = this.visible},
+    createEnabled ()    {this.createEnabled_    = this.createEnabled},
+    createTopicTypes () {this.createTopicTypes_ = this.createTopicTypes},
     // FIXME: add watchers for the remaining props?
 
     input ()  {this.search()},
     check1 () {this.search()},
     check2 () {this.search()},
 
-    menuTopicTypes_ () {
+    createTopicTypes_ () {
       // Set the initial "search" types the same as the "create" types.
       // Note: at component instantiation the "create" types are not known yet.
       if (!this.searchTopicTypes) {
-        this.searchTopicTypes = this.menuTopicTypes_
+        this.searchTopicTypes = this.createTopicTypes_
       }
     },
 
