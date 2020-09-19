@@ -2,10 +2,12 @@
   <el-dialog :custom-class="customClass" :visible="visible_" :width="width" @opened="opened" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
-      <dm5-search-settings :value="topicSettings" :types="searchTopicTypes" ref="topicSettings"></dm5-search-settings>
+      <dm5-search-options :value="topicSettings" :types="searchTopicTypes" ref="topicSettings"
+        @search="search" @create="clickCreate">
+      </dm5-search-options>
       <el-collapse>
         <el-collapse-item title="Association">
-          <dm5-search-settings :value="assocSettings"></dm5-search-settings>
+          <dm5-search-options :value="assocSettings" :types="[]"></dm5-search-options>
         </el-collapse-item>
       </el-collapse>
       <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="input" :marker-ids="markerIds_"
@@ -41,9 +43,6 @@
         @click="create">Create
       </el-button>
     </div>
-    <dm5-type-dialog :visible="typeDialogVisible" :checkedTopicTypes="searchTopicTypes" @close="closeTypeDialog"
-      @checked="checked" @unchecked="unchecked">
-    </dm5-type-dialog>
   </el-dialog>
 </template>
 
@@ -87,17 +86,15 @@ export default {
         input: '',
         check1: false,
         check2: false,
-        type: undefined,     // selected type (dm5.TopicType)
+        type: undefined,      // selected type (dm5.TopicType); undefined if no type is selected
       },
       assocSettings: {
         input: '',
         check1: false,
         check2: false,
-        type: undefined,     // selected type (dm5.AssocType)
+        type: undefined,      // selected type (dm5.AssocType); undefined if no type is selected
       },
       searchTopicTypes: undefined,      // types listed in search menu (array of dm5.TopicType)
-      prevSearchTopicType: undefined,   // previously selected type in search menu (dm5.TopicType)
-      typeDialogVisible: false,
       resultTopics: [],
       // create
       menuItem: undefined,    // Selected item of create menu.
@@ -116,8 +113,24 @@ export default {
 
   computed: {
 
+    // TODO: assoc filter
     input () {
       return this.topicSettings.input
+    },
+
+    // TODO: assoc filter
+    check1 () {
+      return this.topicSettings.check1
+    },
+
+    // TODO: assoc filter
+    check2 () {
+      return this.topicSettings.check2
+    },
+
+    // TODO: assoc filter
+    searchTopicType () {
+      return this.topicSettings.type
     },
 
     trimmedInput () {
@@ -154,27 +167,15 @@ export default {
     createTopicTypes () {this.createTopicTypes_ = this.createTopicTypes},
     // FIXME: add watchers for the remaining props?
 
-    input ()  {this.search()},
-    check1 () {this.search()},
-    check2 () {this.search()},
+    query ()        {this.search()},
+    topicTypeUri () {this.search()},
+    check2 ()       {this.search()},
 
     createTopicTypes_ () {
       // Set the initial "search" types the same as the "create" types.
       // Note: at component instantiation the "create" types are not known yet.
       if (!this.searchTopicTypes) {
         this.searchTopicTypes = this.createTopicTypes_
-      }
-    },
-
-    searchTopicType () {
-      if (this.searchTopicType === "customize") {
-        this.searchTopicType = this.prevSearchTopicType             // Note: retriggers this watcher
-        this.openTypeDialog()
-      } else {
-        if (this.searchTopicType !== this.prevSearchTopicType) {    // ignore if retriggered through "customize"
-          this.prevSearchTopicType = this.searchTopicType
-          this.search()
-        }
       }
     }
   },
@@ -194,33 +195,9 @@ export default {
       })
     },
 
-    openTypeDialog () {
-      this.typeDialogVisible = true
-    },
-
-    closeTypeDialog () {
-      this.typeDialogVisible = false
-    },
-
-    checked (type) {
-      // console.log('checked', type)
-      this.searchTopicTypes.push(type)
-      this.searchTopicTypes.sort((tt1, tt2) => tt1.value.localeCompare(tt2.value))
-    },
-
-    unchecked (type) {
-      // console.log('unchecked', type)
-      const i = this.searchTopicTypes.findIndex(_type => _type.uri === type.uri)
-      this.searchTopicTypes.splice(i, 1)
-      // reset selection when selected type is no longer in type list
-      if (type.uri === this.topicTypeUri) {
-        this.searchTopicType = undefined
-      }
-    },
-
     search: dm5.utils.debounce(function () {
       // compare to dm5-text-field.vue (module dm5-object-renderer)
-      // console.log('search', this.query, this.topicTypeUri, this.check2)
+      console.log('search', this.query, this.topicTypeUri, this.check2)
       if (this.query) {
         dm5.restClient.queryTopicsFulltext(this.query, this.topicTypeUri, this.check2).then(result => {
           if (this.isResultUptodate(result)) {
@@ -241,9 +218,9 @@ export default {
           result.searchChildTopics === this.check2) {
         return true
       }
-      /* console.log("Ignoring " + result.topics.length + " result topics of query \"" + result.query + "\" (" +
+      console.log("Ignoring " + result.topics.length + " result topics of query \"" + result.query + "\" (" +
         result.topicTypeUri + ", " + result.searchChildTopics + "), current query is \"" + this.query + "\" (" +
-        this.topicTypeUri + ", " + this.check2 + ")") */
+        this.topicTypeUri + ", " + this.check2 + ")")
     },
 
     topicClick (topic) {
@@ -302,9 +279,8 @@ export default {
   },
 
   components: {
-    'dm5-topic-list':      require('dmx-topic-list').default,
-    'dm5-search-settings': require('./dm5-search-settings').default,
-    'dm5-type-dialog':     require('./dm5-type-dialog').default
+    'dm5-topic-list':     require('dmx-topic-list').default,
+    'dm5-search-options': require('./dm5-search-options').default
   }
 }
 </script>
