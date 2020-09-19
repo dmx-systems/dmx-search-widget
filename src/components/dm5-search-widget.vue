@@ -2,12 +2,12 @@
   <el-dialog :custom-class="customClass" :visible="visible_" :width="width" @opened="opened" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
-      <dm5-search-options :value="topicSettings" :types="searchTopicTypes" ref="topicSettings"
+      <dm5-search-options class="topic-options" :value="topicOptions" :types="searchTopicTypes" ref="topicOptions"
         @search="search" @create="clickCreate">
       </dm5-search-options>
       <el-collapse>
         <el-collapse-item title="Association">
-          <dm5-search-options :value="assocSettings" :types="[]"></dm5-search-options>
+          <dm5-search-options class="assoc-options" :value="assocOptions" :types="[]"></dm5-search-options>
         </el-collapse-item>
       </el-collapse>
       <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="input" :marker-ids="markerIds_"
@@ -82,13 +82,13 @@ export default {
       // dialog
       customClass: `dm5-search-widget ${this.layout}`,
       // search
-      topicSettings: {
+      topicOptions: {
         input: '',
         check1: false,
         check2: false,
         type: undefined,      // selected type (dm5.TopicType); undefined if no type is selected
       },
-      assocSettings: {
+      assocOptions: {
         input: '',
         check1: false,
         check2: false,
@@ -115,22 +115,22 @@ export default {
 
     // TODO: assoc filter
     input () {
-      return this.topicSettings.input
+      return this.topicOptions.input
     },
 
     // TODO: assoc filter
     check1 () {
-      return this.topicSettings.check1
+      return this.topicOptions.check1
     },
 
     // TODO: assoc filter
     check2 () {
-      return this.topicSettings.check2
+      return this.topicOptions.check2
     },
 
     // TODO: assoc filter
     searchTopicType () {
-      return this.topicSettings.type
+      return this.topicOptions.type
     },
 
     trimmedInput () {
@@ -183,7 +183,7 @@ export default {
   methods: {
 
     opened () {
-      this.$refs.topicSettings.focus()
+      this.$refs.topicOptions.focus()
       this.search()
       // update isAdmin state
       dm5.isAdmin().then(isAdmin => {
@@ -303,18 +303,12 @@ export default {
   flex: auto;
 }
 
-.dm5-search-widget .search #type-select {
-  margin-top: 0.8em;
-  margin-bottom: 0.2em;
+.dm5-search-widget .search .topic-options {
+  margin-bottom: 1em;
 }
 
-.dm5-search-widget .search #type-select .el-select {
-  margin-left: 0.4em;
-}
-
-.dm5-search-widget .search .el-checkbox__label {
-  font-size: var(--label-font-size);
-  color:     var(--label-color);
+.dm5-search-widget .search .assoc-options {
+  margin-left: 1.5em;
 }
 
 .dm5-search-widget .search .dm5-topic-list {
@@ -337,4 +331,21 @@ export default {
   display: block;
   margin-top: 1.5em;
 }
+
+/* Element UI */
+
+.dm5-search-widget .search .el-collapse-item__header {
+  color: var(--label-color);            /* was #303133 */
+  font-size: var(--label-font-size);    /* was 13px */
+  font-weight: unset;                   /* was 500 */
+  line-height: 24px;                    /* was 48px */
+  height: unset;                        /* was 48px */
+}
+
+.dm5-search-widget .search .el-collapse-item__content {
+  padding-bottom: 4px;                  /* was 25px */
+  font-size: unset;                     /* was 13px */
+  line-height: unset;                   /* was 1.769230769230769 */
+}
+
 </style>

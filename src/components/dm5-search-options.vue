@@ -1,7 +1,7 @@
 <template>
   <div class="dm5-search-options">
     <el-input v-model="value.input" ref="input" @keyup.native.enter="$emit('create')"></el-input>
-    <div id="type-select">
+    <div class="type-select">
       <el-checkbox v-model="value.check1">Search only selected type</el-checkbox>
       <!-- "Search" menu -->
       <el-select v-model="value.type" value-key="uri" :disabled="!value.check1">
@@ -91,4 +91,17 @@ export default {
 </script>
 
 <style>
+.dm5-search-options .type-select {
+  margin-top: 0.8em;
+  margin-bottom: 0.2em;
+}
+
+.dm5-search-options .type-select .el-select {
+  margin-left: 0.4em;
+}
+
+.dm5-search-options .el-checkbox__label {
+  font-size: var(--label-font-size);
+  color:     var(--label-color);
+}
 </style>
