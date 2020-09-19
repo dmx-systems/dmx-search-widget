@@ -2,22 +2,12 @@
   <el-dialog :custom-class="customClass" :visible="visible_" :width="width" @opened="opened" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
-      <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
-      <div id="type-select">
-        <el-checkbox v-model="check1">Search only selected type</el-checkbox>
-        <!-- "Search" menu -->
-        <el-select v-model="searchTopicType" value-key="uri" :disabled="!check1">
-          <el-option-group>
-            <el-option v-for="type in searchTopicTypes" :label="type.value" :value="type" :key="type.uri">
-              <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
-            </el-option>
-          </el-option-group>
-          <el-option-group>
-            <el-option label="Customize Type List…" value="customize"></el-option>
-          </el-option-group>
-        </el-select>
-      </div>
-      <el-checkbox v-model="check2" :disabled="!check1">Search child topics</el-checkbox>
+      <dm5-search-settings :value="topicSettings" :types="searchTopicTypes" ref="topicSettings"></dm5-search-settings>
+      <el-collapse>
+        <el-collapse-item title="Association">
+          <dm5-search-settings :value="assocSettings"></dm5-search-settings>
+        </el-collapse-item>
+      </el-collapse>
       <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="input" :marker-ids="markerIds_"
         @topic-click="topicClick" @icon-click="iconClick">
       </dm5-topic-list>
@@ -93,11 +83,19 @@ export default {
       // dialog
       customClass: `dm5-search-widget ${this.layout}`,
       // search
-      input: '',
-      check1: false,
-      check2: false,
+      topicSettings: {
+        input: '',
+        check1: false,
+        check2: false,
+        type: undefined,     // selected type (dm5.TopicType)
+      },
+      assocSettings: {
+        input: '',
+        check1: false,
+        check2: false,
+        type: undefined,     // selected type (dm5.AssocType)
+      },
       searchTopicTypes: undefined,      // types listed in search menu (array of dm5.TopicType)
-      searchTopicType: undefined,       // selected type in search menu (dm5.TopicType)
       prevSearchTopicType: undefined,   // previously selected type in search menu (dm5.TopicType)
       typeDialogVisible: false,
       resultTopics: [],
@@ -117,6 +115,10 @@ export default {
   },
 
   computed: {
+
+    input () {
+      return this.topicSettings.input
+    },
 
     trimmedInput () {
       return this.input.trim()
@@ -180,7 +182,7 @@ export default {
   methods: {
 
     opened () {
-      this.$refs.input.select()
+      this.$refs.topicSettings.focus()
       this.search()
       // update isAdmin state
       dm5.isAdmin().then(isAdmin => {
@@ -300,8 +302,9 @@ export default {
   },
 
   components: {
-    'dm5-topic-list':  require('dmx-topic-list').default,
-    'dm5-type-dialog': require('./dm5-type-dialog').default
+    'dm5-topic-list':      require('dmx-topic-list').default,
+    'dm5-search-settings': require('./dm5-search-settings').default,
+    'dm5-type-dialog':     require('./dm5-type-dialog').default
   }
 }
 </script>
