@@ -2,12 +2,13 @@
   <el-dialog :custom-class="customClass" :visible="visible_" :width="width" @opened="opened" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
-      <dm5-search-options class="topic-options" :value="topicOptions" :types="searchTopicTypes" ref="topicOptions"
+      <dm5-search-options class="topic-options" :model="topicOptions" :types="searchTopicTypes" ref="topicOptions"
         @search="search" @create="clickCreate">
       </dm5-search-options>
       <el-collapse>
         <el-collapse-item title="Association">
-          <dm5-search-options class="assoc-options" :value="assocOptions" :types="[]"></dm5-search-options>
+          <dm5-search-options class="assoc-options" :model="assocOptions" :types="[]" ref="assocOptions">
+          </dm5-search-options>
         </el-collapse-item>
       </el-collapse>
       <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="input" :marker-ids="markerIds_"
@@ -113,38 +114,29 @@ export default {
 
   computed: {
 
-    // TODO: assoc filter
     input () {
       return this.topicOptions.input
-    },
-
-    // TODO: assoc filter
-    check1 () {
-      return this.topicOptions.check1
-    },
-
-    // TODO: assoc filter
-    check2 () {
-      return this.topicOptions.check2
-    },
-
-    // TODO: assoc filter
-    searchTopicType () {
-      return this.topicOptions.type
     },
 
     trimmedInput () {
       return this.input.trim()
     },
 
-    topicTypeUri () {
-      // Note: if checkbox is unchecked undefined must be passed to REST client (instead of false)
-      return this.check1 && this.searchTopicType && this.searchTopicType.uri || undefined
+    // Topic Filter
+
+    topicQuery () {
+      return this.$refs.topicOptions.query
     },
 
-    query () {
-      return dm5.utils.fulltextQuery(this.input)
+    topicTypeUri () {
+      return this.$refs.topicOptions.typeUri
     },
+
+    topicCheck2 () {
+      return this.topicOptions.check2
+    },
+
+    // Create
 
     optionsComp () {
       return (this.isTopicmapType || this.isExtraMenuItem) && this.menuItem.optionsComp
@@ -166,10 +158,6 @@ export default {
     createEnabled ()    {this.createEnabled_    = this.createEnabled},
     createTopicTypes () {this.createTopicTypes_ = this.createTopicTypes},
     // FIXME: add watchers for the remaining props?
-
-    query ()        {this.search()},
-    topicTypeUri () {this.search()},
-    check2 ()       {this.search()},
 
     createTopicTypes_ () {
       // Set the initial "search" types the same as the "create" types.
@@ -197,14 +185,14 @@ export default {
 
     search: dm5.utils.debounce(function () {
       // compare to dm5-text-field.vue (module dm5-object-renderer)
-      console.log('search', this.query, this.topicTypeUri, this.check2)
-      if (this.query) {
-        dm5.restClient.queryTopicsFulltext(this.query, this.topicTypeUri, this.check2).then(result => {
+      console.log('search', this.topicQuery, this.topicTypeUri, this.topicCheck2)
+      if (this.topicQuery) {
+        dm5.restClient.queryTopicsFulltext(this.topicQuery, this.topicTypeUri, this.topicCheck2).then(result => {
           if (this.isResultUptodate(result)) {
             this.resultTopics = result.topics
           }
         }).catch(e => {
-          console.warn(`Query "${this.query}" failed (${e})`)
+          console.warn(`Query "${this.topicQuery}" failed (${e})`)
           this.resultTopics = []
         })
       } else {
@@ -213,14 +201,14 @@ export default {
     }, 300),
 
     isResultUptodate (result) {
-      if (result.query === this.query &&
+      if (result.query === this.topicQuery &&
           result.topicTypeUri === this.topicTypeUri &&
-          result.searchChildTopics === this.check2) {
+          result.searchChildTopics === this.topicCheck2) {
         return true
       }
       console.log("Ignoring " + result.topics.length + " result topics of query \"" + result.query + "\" (" +
-        result.topicTypeUri + ", " + result.searchChildTopics + "), current query is \"" + this.query + "\" (" +
-        this.topicTypeUri + ", " + this.check2 + ")")
+        result.topicTypeUri + ", " + result.searchChildTopics + "), current query is \"" + this.topicQuery + "\" (" +
+        this.topicTypeUri + ", " + this.topicCheck2 + ")")
     },
 
     topicClick (topic) {
