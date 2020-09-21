@@ -136,6 +136,20 @@ export default {
       return this.topicOptions.check2
     },
 
+    // Assoc Filter
+
+    assocQuery () {
+      return this.$refs.assocOptions.query
+    },
+
+    assocTypeUri () {
+      return this.$refs.assocOptions.typeUri
+    },
+
+    assocCheck2 () {
+      return this.assocOptions.check2
+    },
+
     // Create
 
     optionsComp () {
@@ -185,9 +199,11 @@ export default {
 
     search: dm5.utils.debounce(function () {
       // compare to dm5-text-field.vue (module dm5-object-renderer)
-      console.log('search', this.topicQuery, this.topicTypeUri, this.topicCheck2)
+      console.log('search', this.topicQuery, this.topicTypeUri, this.topicCheck2,
+                            this.assocQuery, this.assocTypeUri, this.assocCheck2)
       if (this.topicQuery) {
-        dm5.restClient.queryTopicsFulltext(this.topicQuery, this.topicTypeUri, this.topicCheck2).then(result => {
+        dm5.restClient.queryRelatedTopicsFulltext(this.topicQuery, this.topicTypeUri, this.topicCheck2,
+                                                  this.assocQuery, this.assocTypeUri, this.assocCheck2).then(result => {
           if (this.isResultUptodate(result)) {
             this.resultTopics = result.topics
           }
@@ -201,14 +217,19 @@ export default {
     }, 300),
 
     isResultUptodate (result) {
-      if (result.query === this.topicQuery &&
-          result.topicTypeUri === this.topicTypeUri &&
-          result.searchChildTopics === this.topicCheck2) {
+      if (result.topicQuery          === this.topicQuery &&
+          result.topicTypeUri        === this.topicTypeUri &&
+          result.searchTopicChildren === this.topicCheck2 &&
+          result.assocQuery          === this.assocQuery &&
+          result.assocTypeUri        === this.assocTypeUri &&
+          result.searchAssocChildren === this.assocCheck2) {
         return true
       }
-      console.log("Ignoring " + result.topics.length + " result topics of query \"" + result.query + "\" (" +
-        result.topicTypeUri + ", " + result.searchChildTopics + "), current query is \"" + this.topicQuery + "\" (" +
-        this.topicTypeUri + ", " + this.topicCheck2 + ")")
+      console.log("Ignoring " + result.topics.length + " result topics of query\n\"" + result.topicQuery + "\" (" +
+        result.topicTypeUri + ", " + result.searchTopicChildren + ") \"" + result.assocQuery + "\" (" +
+        result.assocTypeUri + ", " + result.searchAssocChildren + "), current query is\n\"" + this.topicQuery + "\" (" +
+        this.topicTypeUri + ", " + this.topicCheck2 + ") \"" + this.assocQuery + "\" (" +
+        this.assocTypeUri + ", " + this.assocCheck2 + ")")
     },
 
     topicClick (topic) {
