@@ -3,11 +3,12 @@
     <div class="search">
       <div class="heading label">Search</div>
       <dm5-search-options class="topic-options" :model="topicOptions" :types="searchTopicTypes" ref="topicOptions"
-        @search="search" @create="clickCreate">
+        @search="search" @create="clickCreateButton">
       </dm5-search-options>
       <el-collapse>
         <el-collapse-item title="Association">
-          <dm5-search-options class="assoc-options" :model="assocOptions" :types="[]" ref="assocOptions">
+          <dm5-search-options class="assoc-options" :model="assocOptions" :types="[]" ref="assocOptions"
+            @search="search" @create="clickCreateButton">
           </dm5-search-options>
         </el-collapse-item>
       </el-collapse>
@@ -275,7 +276,7 @@ export default {
       this.close()
     },
 
-    clickCreate () {
+    clickCreateButton () {
       const button = this.$refs.create
       button && button.$el.click()
     },
