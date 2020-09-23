@@ -2,7 +2,7 @@
   <div class="dm5-search-options">
     <el-input v-model="model.input" ref="input" @keyup.native.enter="$emit('create')"></el-input>
     <div class="type-select">
-      <el-checkbox v-model="model.check1">Search only selected type</el-checkbox>
+      <el-checkbox v-model="model.check1">{{model.label}}</el-checkbox>
       <!-- "Search" menu -->
       <el-select v-model="model.type" value-key="uri" :disabled="!model.check1">
         <el-option-group>
@@ -16,8 +16,8 @@
       </el-select>
     </div>
     <el-checkbox v-model="model.check2" :disabled="!model.check1">Search child topics</el-checkbox>
-    <dm5-type-dialog :visible="typeDialogVisible" :checkedTopicTypes="types" @close="closeTypeDialog"
-      @checked="checked" @unchecked="unchecked">
+    <dm5-type-dialog :visible="typeDialogVisible" :types-func="model.typesFunc" :checkedTypes="types"
+      @close="closeTypeDialog" @checked="checked" @unchecked="unchecked">
     </dm5-type-dialog>
   </div>
 </template>

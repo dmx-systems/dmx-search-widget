@@ -7,7 +7,7 @@
       </dm5-search-options>
       <el-collapse>
         <el-collapse-item title="Association">
-          <dm5-search-options class="assoc-options" :model="assocOptions" :types="[]" ref="assocOptions"
+          <dm5-search-options class="assoc-options" :model="assocOptions" :types="searchAssocTypes" ref="assocOptions"
             @search="search" @create="clickCreateButton">
           </dm5-search-options>
         </el-collapse-item>
@@ -85,18 +85,23 @@ export default {
       customClass: `dm5-search-widget ${this.layout}`,
       // search
       topicOptions: {
+        label: 'Restrict by topic type',
+        typesFunc: dm5.typeCache.getAllTopicTypes,
         input: '',
         check1: false,
         check2: false,
         type: undefined,      // selected type (dm5.TopicType); undefined if no type is selected
       },
       assocOptions: {
+        label: 'Restrict by association type',
+        typesFunc: dm5.typeCache.getAllAssocTypes,
         input: '',
         check1: false,
         check2: false,
         type: undefined,      // selected type (dm5.AssocType); undefined if no type is selected
       },
-      searchTopicTypes: undefined,      // types listed in search menu (array of dm5.TopicType)
+      searchTopicTypes: undefined,      // topic types listed in search menu (array of dm5.TopicType)
+      searchAssocTypes: [],
       resultTopics: [],
       // create
       menuItem: undefined,    // Selected item of create menu.
