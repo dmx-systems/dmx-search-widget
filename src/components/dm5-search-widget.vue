@@ -86,7 +86,7 @@ export default {
       // search
       topicOptions: {
         label: 'Restrict by topic type',
-        typesFunc: dm5.typeCache.getAllTopicTypes,
+        typesFunc: dm5.typeCache.getAllTopicTypes,    // evaluated lazily in dm5-type-dialog.vue
         input: '',
         check1: false,
         check2: false,
@@ -94,14 +94,14 @@ export default {
       },
       assocOptions: {
         label: 'Restrict by association type',
-        typesFunc: dm5.typeCache.getAllAssocTypes,
+        typesFunc: dm5.typeCache.getAllAssocTypes,    // evaluated lazily in dm5-type-dialog.vue
         input: '',
         check1: false,
         check2: false,
         type: undefined,      // selected type (dm5.AssocType); undefined if no type is selected
       },
       searchTopicTypes: undefined,      // topic types listed in search menu (array of dm5.TopicType)
-      searchAssocTypes: [],
+      searchAssocTypes: [],             // assoc types listed in search menu (array of dm5.AssocType)
       resultTopics: [],
       // create
       menuItem: undefined,    // Selected item of create menu.
@@ -130,6 +130,10 @@ export default {
 
     // Topic Filter
 
+    isTopicFilterSet () {
+      return this.$refs.topicOptions.isSet
+    },
+
     topicQuery () {
       return this.$refs.topicOptions.query
     },
@@ -143,6 +147,10 @@ export default {
     },
 
     // Assoc Filter
+
+    isAssocFilterSet () {
+      return this.$refs.assocOptions.isSet
+    },
 
     assocQuery () {
       return this.$refs.assocOptions.query
@@ -205,11 +213,15 @@ export default {
 
     search: dm5.utils.debounce(function () {
       // compare to dm5-text-field.vue (module dm5-object-renderer)
-      console.log('search', this.topicQuery, this.topicTypeUri, this.topicCheck2,
-                            this.assocQuery, this.assocTypeUri, this.assocCheck2)
-      if (this.topicQuery) {
-        dm5.restClient.queryRelatedTopicsFulltext(this.topicQuery, this.topicTypeUri, this.topicCheck2,
-                                                  this.assocQuery, this.assocTypeUri, this.assocCheck2).then(result => {
+      if (this.isTopicFilterSet || this.isAssocFilterSet) {
+        console.log('search',
+          this.topicQuery, this.topicTypeUri, this.topicCheck2,
+          this.assocQuery, this.assocTypeUri, this.assocCheck2
+        )
+        dm5.restClient.queryRelatedTopicsFulltext(
+          this.topicQuery, this.topicTypeUri, this.topicCheck2,
+          this.assocQuery, this.assocTypeUri, this.assocCheck2)
+        .then(result => {
           if (this.isResultUptodate(result)) {
             this.resultTopics = result.topics
           }

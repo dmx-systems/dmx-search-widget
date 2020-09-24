@@ -16,7 +16,7 @@
       </el-select>
     </div>
     <el-checkbox v-model="model.check2" :disabled="!model.check1">Search child topics</el-checkbox>
-    <dm5-type-dialog :visible="typeDialogVisible" :types-func="model.typesFunc" :checkedTypes="types"
+    <dm5-type-dialog :visible="typeDialogVisible" :types-func="model.typesFunc" :checked-types="types"
       @close="closeTypeDialog" @checked="checked" @unchecked="unchecked">
     </dm5-type-dialog>
   </div>
@@ -48,6 +48,10 @@ export default {
     typeUri () {
       // Note: if checkbox is unchecked undefined must be passed to REST client (instead of false)
       return this.model.check1 && this.model.type && this.model.type.uri || undefined
+    },
+
+    isSet () {
+      return this.query || this.typeUri || this.model.check2
     }
   },
 
