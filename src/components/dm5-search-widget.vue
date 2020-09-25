@@ -143,7 +143,7 @@ export default {
     },
 
     topicCheck2 () {
-      return this.topicOptions.check2
+      return this.topicOptions.check2 && !this.$refs.topicOptions.check2Disabled
     },
 
     // Assoc Filter
@@ -161,7 +161,7 @@ export default {
     },
 
     assocCheck2 () {
-      return this.assocOptions.check2
+      return this.assocOptions.check2 && !this.$refs.assocOptions.check2Disabled
     },
 
     // Create
