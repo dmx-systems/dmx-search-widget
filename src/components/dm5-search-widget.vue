@@ -12,7 +12,7 @@
           </dm5-search-options>
         </el-collapse-item>
       </el-collapse>
-      <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="input" :marker-ids="markerIds_"
+      <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="resultVisible" :marker-ids="markerIds_"
         @topic-click="topicClick" @icon-click="iconClick">
       </dm5-topic-list>
     </div>
@@ -103,6 +103,7 @@ export default {
       searchTopicTypes: undefined,      // topic types listed in search menu (array of dm5.TopicType)
       searchAssocTypes: [],             // assoc types listed in search menu (array of dm5.AssocType)
       resultTopics: [],
+      resultVisible: false,
       // create
       menuItem: undefined,    // Selected item of create menu.
                               // Either a dm5.TopicType or an extra menu item (Object).
@@ -215,22 +216,23 @@ export default {
       // compare to dm5-text-field.vue (module dm5-object-renderer)
       if (this.isTopicFilterSet || this.isAssocFilterSet) {
         console.log('search',
-          this.topicQuery, this.topicTypeUri, this.topicCheck2,
-          this.assocQuery, this.assocTypeUri, this.assocCheck2
+          this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
         )
         dm5.restClient.queryRelatedTopicsFulltext(
-          this.topicQuery, this.topicTypeUri, this.topicCheck2,
-          this.assocQuery, this.assocTypeUri, this.assocCheck2)
-        .then(result => {
+          this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
+        ).then(result => {
           if (this.isResultUptodate(result)) {
             this.resultTopics = result.topics
+            this.resultVisible = true
           }
         }).catch(e => {
-          console.warn(`Query "${this.topicQuery}" failed (${e})`)
+          console.warn(`Query '${this.topicQuery}' failed (${e})`)
           this.resultTopics = []
+          this.resultVisible = false
         })
       } else {
         this.resultTopics = []
+        this.resultVisible = false
       }
     }, 300),
 
