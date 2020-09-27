@@ -2,23 +2,17 @@
   <el-dialog :custom-class="customClass" :visible="visible_" :width="width" @opened="opened" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
-      <el-input v-model="input" ref="input" @keyup.native.enter="clickCreate"></el-input>
-      <div id="type-select">
-        <el-checkbox v-model="check1">Search only selected type</el-checkbox>
-        <!-- "Search" menu -->
-        <el-select v-model="searchTopicType" value-key="uri" :disabled="!check1">
-          <el-option-group>
-            <el-option v-for="type in searchTopicTypes" :label="type.value" :value="type" :key="type.uri">
-              <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
-            </el-option>
-          </el-option-group>
-          <el-option-group>
-            <el-option label="Customize Type List…" value="customize"></el-option>
-          </el-option-group>
-        </el-select>
-      </div>
-      <el-checkbox v-model="check2" :disabled="!check1">Search child topics</el-checkbox>
-      <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="input" :marker-ids="markerIds_"
+      <dm5-search-options class="topic-options" :model="topicOptions" :types="searchTopicTypes" ref="topicOptions"
+        @search="search" @create="clickCreateButton">
+      </dm5-search-options>
+      <el-collapse>
+        <el-collapse-item title="Association">
+          <dm5-search-options class="assoc-options" :model="assocOptions" :types="searchAssocTypes" ref="assocOptions"
+            @search="search" @create="clickCreateButton">
+          </dm5-search-options>
+        </el-collapse-item>
+      </el-collapse>
+      <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="resultVisible" :marker-ids="markerIds_"
         @topic-click="topicClick" @icon-click="iconClick">
       </dm5-topic-list>
     </div>
@@ -51,9 +45,6 @@
         @click="create">Create
       </el-button>
     </div>
-    <dm5-type-dialog :visible="typeDialogVisible" :checkedTopicTypes="searchTopicTypes" @close="closeTypeDialog"
-      @checked="checked" @unchecked="unchecked">
-    </dm5-type-dialog>
   </el-dialog>
 </template>
 
@@ -93,14 +84,26 @@ export default {
       // dialog
       customClass: `dm5-search-widget ${this.layout}`,
       // search
-      input: '',
-      check1: false,
-      check2: false,
-      searchTopicTypes: undefined,      // types listed in search menu (array of dm5.TopicType)
-      searchTopicType: undefined,       // selected type in search menu (dm5.TopicType)
-      prevSearchTopicType: undefined,   // previously selected type in search menu (dm5.TopicType)
-      typeDialogVisible: false,
+      topicOptions: {
+        label: 'Restrict by topic type',
+        typesFunc: dm5.typeCache.getAllTopicTypes,    // evaluated lazily in dm5-type-dialog.vue
+        input: '',
+        check1: false,
+        check2: false,
+        type: undefined,      // selected type (dm5.TopicType); undefined if no type is selected
+      },
+      assocOptions: {
+        label: 'Restrict by association type',
+        typesFunc: dm5.typeCache.getAllAssocTypes,    // evaluated lazily in dm5-type-dialog.vue
+        input: '',
+        check1: false,
+        check2: false,
+        type: undefined,      // selected type (dm5.AssocType); undefined if no type is selected
+      },
+      searchTopicTypes: undefined,      // topic types listed in search menu (array of dm5.TopicType)
+      searchAssocTypes: [],             // assoc types listed in search menu (array of dm5.AssocType)
       resultTopics: [],
+      resultVisible: false,
       // create
       menuItem: undefined,    // Selected item of create menu.
                               // Either a dm5.TopicType or an extra menu item (Object).
@@ -118,18 +121,51 @@ export default {
 
   computed: {
 
+    input () {
+      return this.topicOptions.input
+    },
+
     trimmedInput () {
       return this.input.trim()
     },
 
-    topicTypeUri () {
-      // Note: if checkbox is unchecked undefined must be passed to REST client (instead of false)
-      return this.check1 && this.searchTopicType && this.searchTopicType.uri || undefined
+    // Topic Filter
+
+    isTopicFilterSet () {
+      return this.$refs.topicOptions.isSet
     },
 
-    query () {
-      return dm5.utils.fulltextQuery(this.input)
+    topicQuery () {
+      return this.$refs.topicOptions.query
     },
+
+    topicTypeUri () {
+      return this.$refs.topicOptions.typeUri
+    },
+
+    topicCheck2 () {
+      return this.topicOptions.check2
+    },
+
+    // Assoc Filter
+
+    isAssocFilterSet () {
+      return this.$refs.assocOptions.isSet
+    },
+
+    assocQuery () {
+      return this.$refs.assocOptions.query
+    },
+
+    assocTypeUri () {
+      return this.$refs.assocOptions.typeUri
+    },
+
+    assocCheck2 () {
+      return this.assocOptions.check2
+    },
+
+    // Create
 
     optionsComp () {
       return (this.isTopicmapType || this.isExtraMenuItem) && this.menuItem.optionsComp
@@ -152,27 +188,11 @@ export default {
     createTopicTypes () {this.createTopicTypes_ = this.createTopicTypes},
     // FIXME: add watchers for the remaining props?
 
-    input ()  {this.search()},
-    check1 () {this.search()},
-    check2 () {this.search()},
-
     createTopicTypes_ () {
       // Set the initial "search" types the same as the "create" types.
       // Note: at component instantiation the "create" types are not known yet.
       if (!this.searchTopicTypes) {
         this.searchTopicTypes = this.createTopicTypes_
-      }
-    },
-
-    searchTopicType () {
-      if (this.searchTopicType === "customize") {
-        this.searchTopicType = this.prevSearchTopicType             // Note: retriggers this watcher
-        this.openTypeDialog()
-      } else {
-        if (this.searchTopicType !== this.prevSearchTopicType) {    // ignore if retriggered through "customize"
-          this.prevSearchTopicType = this.searchTopicType
-          this.search()
-        }
       }
     }
   },
@@ -180,7 +200,7 @@ export default {
   methods: {
 
     opened () {
-      this.$refs.input.select()
+      this.$refs.topicOptions.focus()
       this.search()
       // update isAdmin state
       dm5.isAdmin().then(isAdmin => {
@@ -192,56 +212,44 @@ export default {
       })
     },
 
-    openTypeDialog () {
-      this.typeDialogVisible = true
-    },
-
-    closeTypeDialog () {
-      this.typeDialogVisible = false
-    },
-
-    checked (type) {
-      // console.log('checked', type)
-      this.searchTopicTypes.push(type)
-      this.searchTopicTypes.sort((tt1, tt2) => tt1.value.localeCompare(tt2.value))
-    },
-
-    unchecked (type) {
-      // console.log('unchecked', type)
-      const i = this.searchTopicTypes.findIndex(_type => _type.uri === type.uri)
-      this.searchTopicTypes.splice(i, 1)
-      // reset selection when selected type is no longer in type list
-      if (type.uri === this.topicTypeUri) {
-        this.searchTopicType = undefined
-      }
-    },
-
     search: dm5.utils.debounce(function () {
       // compare to dm5-text-field.vue (module dm5-object-renderer)
-      // console.log('search', this.query, this.topicTypeUri, this.check2)
-      if (this.query) {
-        dm5.restClient.queryTopicsFulltext(this.query, this.topicTypeUri, this.check2).then(result => {
+      if (this.isTopicFilterSet || this.isAssocFilterSet) {
+        console.log('search',
+          this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
+        )
+        dm5.restClient.queryRelatedTopicsFulltext(
+          this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
+        ).then(result => {
           if (this.isResultUptodate(result)) {
             this.resultTopics = result.topics
+            this.resultVisible = true
           }
         }).catch(e => {
-          console.warn(`Query "${this.query}" failed (${e})`)
+          console.warn(`Query '${this.topicQuery}' failed (${e})`)
           this.resultTopics = []
+          this.resultVisible = false
         })
       } else {
         this.resultTopics = []
+        this.resultVisible = false
       }
     }, 300),
 
     isResultUptodate (result) {
-      if (result.query === this.query &&
-          result.topicTypeUri === this.topicTypeUri &&
-          result.searchChildTopics === this.check2) {
+      if (result.topicQuery          === this.topicQuery &&
+          result.topicTypeUri        === this.topicTypeUri &&
+          result.searchTopicChildren === this.topicCheck2 &&
+          result.assocQuery          === this.assocQuery &&
+          result.assocTypeUri        === this.assocTypeUri &&
+          result.searchAssocChildren === this.assocCheck2) {
         return true
       }
-      /* console.log("Ignoring " + result.topics.length + " result topics of query \"" + result.query + "\" (" +
-        result.topicTypeUri + ", " + result.searchChildTopics + "), current query is \"" + this.query + "\" (" +
-        this.topicTypeUri + ", " + this.check2 + ")") */
+      console.log("Ignoring " + result.topics.length + " result topics of query\n\"" + result.topicQuery + "\" (" +
+        result.topicTypeUri + ", " + result.searchTopicChildren + ") \"" + result.assocQuery + "\" (" +
+        result.assocTypeUri + ", " + result.searchAssocChildren + "), current query is\n\"" + this.topicQuery + "\" (" +
+        this.topicTypeUri + ", " + this.topicCheck2 + ") \"" + this.assocQuery + "\" (" +
+        this.assocTypeUri + ", " + this.assocCheck2 + ")")
     },
 
     topicClick (topic) {
@@ -287,7 +295,7 @@ export default {
       this.close()
     },
 
-    clickCreate () {
+    clickCreateButton () {
       const button = this.$refs.create
       button && button.$el.click()
     },
@@ -300,8 +308,8 @@ export default {
   },
 
   components: {
-    'dm5-topic-list':  require('dmx-topic-list').default,
-    'dm5-type-dialog': require('./dm5-type-dialog').default
+    'dm5-topic-list':     require('dmx-topic-list').default,
+    'dm5-search-options': require('./dm5-search-options').default
   }
 }
 </script>
@@ -324,18 +332,12 @@ export default {
   flex: auto;
 }
 
-.dm5-search-widget .search #type-select {
-  margin-top: 0.8em;
-  margin-bottom: 0.2em;
+.dm5-search-widget .search .topic-options {
+  margin-bottom: 1em;
 }
 
-.dm5-search-widget .search #type-select .el-select {
-  margin-left: 0.4em;
-}
-
-.dm5-search-widget .search .el-checkbox__label {
-  font-size: var(--label-font-size);
-  color:     var(--label-color);
+.dm5-search-widget .search .assoc-options {
+  margin-left: 1.5em;
 }
 
 .dm5-search-widget .search .dm5-topic-list {
@@ -358,4 +360,21 @@ export default {
   display: block;
   margin-top: 1.5em;
 }
+
+/* Element UI */
+
+.dm5-search-widget .search .el-collapse-item__header {
+  color: var(--label-color);            /* was #303133 */
+  font-size: var(--label-font-size);    /* was 13px */
+  font-weight: unset;                   /* was 500 */
+  line-height: 24px;                    /* was 48px */
+  height: unset;                        /* was 48px */
+}
+
+.dm5-search-widget .search .el-collapse-item__content {
+  padding-bottom: 4px;                  /* was 25px */
+  font-size: unset;                     /* was 13px */
+  line-height: unset;                   /* was 1.769230769230769 */
+}
+
 </style>

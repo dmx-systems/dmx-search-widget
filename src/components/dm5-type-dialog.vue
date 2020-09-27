@@ -14,20 +14,20 @@ export default {
 
   props: {
     visible: Boolean,
-    checkedTopicTypes: Array
+    typesFunc: Function,
+    checkedTypes: Array
   },
 
   computed: {
     types () {
-      return dm5.typeCache.getAllTopicTypes()
-        .sort((tt1, tt2) => tt1.value.localeCompare(tt2.value))
+      return this.typesFunc().sort((tt1, tt2) => tt1.value.localeCompare(tt2.value))
     }
   },
 
   methods: {
 
     checked (type) {
-      return this.checkedTopicTypes.some(_type => _type.uri === type.uri)
+      return this.checkedTypes.some(_type => _type.uri === type.uri)
     },
 
     input (type, checked) {
