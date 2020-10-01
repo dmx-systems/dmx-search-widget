@@ -253,7 +253,8 @@ export default {
     },
 
     topicClick (topic) {
-      this.$emit('topic-click', topic)
+      // Note: if assoc filter is set `topic` is a rel-topic (and thus contains an assoc as well)
+      this.$emit(this.isAssocFilterSet ? 'assoc-click' : 'topic-click', topic)
       this.close()
     },
 
