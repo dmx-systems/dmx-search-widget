@@ -15,7 +15,7 @@
         </el-option-group>
       </el-select>
     </div>
-    <el-checkbox v-model="model.check2" :disabled="check2Disabled">Search child topics</el-checkbox>
+    <el-checkbox v-model="model.check2" :disabled="check2Disabled">Widen search to child topics</el-checkbox>
     <dm5-type-dialog :visible="typeDialogVisible" :types-func="model.typesFunc" :checked-types="types"
       @close="closeTypeDialog" @checked="checked" @unchecked="unchecked">
     </dm5-type-dialog>
