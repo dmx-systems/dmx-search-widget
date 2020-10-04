@@ -367,9 +367,9 @@ export default {
 .dm5-search-widget .search .el-collapse-item__header {
   color: var(--label-color);            /* was #303133 */
   font-size: var(--label-font-size);    /* was 13px */
-  font-weight: unset;                   /* was 500 */
+  font-weight: normal;                  /* was 500 */
   line-height: 24px;                    /* was 48px */
-  height: unset;                        /* was 48px */
+  height: 24px;                         /* was 48px */
 }
 
 .dm5-search-widget .search .el-collapse-item__content {
