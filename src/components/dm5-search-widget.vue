@@ -12,8 +12,8 @@
           </dm5-search-options>
         </el-collapse-item>
       </el-collapse>
-      <dm5-topic-list :topics="resultTopics" empty-text="No Match" v-if="resultVisible" :marker-ids="markerIds_"
-        @topic-click="topicClick" @icon-click="iconClick">
+      <dm5-topic-list :topics="resultTopics" topics-label="Result" empty-text="No Result" v-if="resultVisible"
+        :marker-ids="markerIds_" @topic-click="topicClick" @icon-click="iconClick">
       </dm5-topic-list>
     </div>
     <div class="create" v-if="createEnabled_">
