@@ -124,12 +124,12 @@ export default {
 
 <style>
 .dm5-search-options .type-select {
-  margin-top: 0.8em;
-  margin-bottom: 0.2em;
+  margin-top: 6px;
+  margin-bottom: 2px;
 }
 
 .dm5-search-options .type-select .el-select {
-  margin-left: 0.4em;
+  margin-left: 6px;
 }
 
 .dm5-search-options .el-checkbox__label {

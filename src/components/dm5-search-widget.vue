@@ -2,12 +2,14 @@
   <el-dialog :custom-class="customClass" :visible="visible_" :width="width" @opened="opened" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
-      <dm5-search-options class="topic-options" :model="topicOptions" :types="searchTopicTypes" ref="topicOptions"
-        @search="search" @create="clickCreateButton">
-      </dm5-search-options>
-      <el-collapse>
-        <el-collapse-item title="Association">
-          <dm5-search-options class="assoc-options" :model="assocOptions" :types="searchAssocTypes" ref="assocOptions"
+      <el-collapse v-model="activeOptions">
+        <el-collapse-item title="Topic Filter" :name="0">
+          <dm5-search-options :model="topicOptions" :types="searchTopicTypes" ref="topicOptions"
+            @search="search" @create="clickCreateButton">
+          </dm5-search-options>
+        </el-collapse-item>
+        <el-collapse-item title="Association Filter">
+          <dm5-search-options :model="assocOptions" :types="searchAssocTypes" ref="assocOptions"
             @search="search" @create="clickCreateButton">
           </dm5-search-options>
         </el-collapse-item>
@@ -84,6 +86,7 @@ export default {
       // dialog
       customClass: `dm5-search-widget ${this.layout}`,
       // search
+      activeOptions: [0],
       topicOptions: {
         label: 'Restrict by topic type',
         typesFunc: dm5.typeCache.getAllTopicTypes,    // evaluated lazily in dm5-type-dialog.vue
@@ -333,12 +336,8 @@ export default {
   flex: auto;
 }
 
-.dm5-search-widget .search .topic-options {
-  margin-bottom: 1em;
-}
-
-.dm5-search-widget .search .assoc-options {
-  margin-left: 1.5em;
+.dm5-search-widget .search .el-collapse {
+  background-color: var(--background-color) !important;
 }
 
 .dm5-search-widget .search .dm5-topic-list {
@@ -366,14 +365,19 @@ export default {
 
 .dm5-search-widget .search .el-collapse-item__header {
   color: var(--label-color);            /* was #303133 */
+  background-color: unset;              /* was #fff */
   font-size: var(--label-font-size);    /* was 13px */
   font-weight: normal;                  /* was 500 */
   line-height: 24px;                    /* was 48px */
   height: 24px;                         /* was 48px */
 }
 
+.dm5-search-widget .search .el-collapse-item__wrap {
+  background-color: unset;              /* was #fff */
+}
+
 .dm5-search-widget .search .el-collapse-item__content {
-  padding-bottom: 4px;                  /* was 25px */
+  padding: 0 12px 24px 12px;            /* was padding-bottom: 25px */
   font-size: unset;                     /* was 13px */
   line-height: unset;                   /* was 1.769230769230769 */
 }
