@@ -1,5 +1,6 @@
 <template>
-  <el-dialog :custom-class="customClass" :visible="visible_" :width="width" @opened="opened" @close="close">
+  <el-dialog :modal="false" :custom-class="customClass" :visible="visible_" :width="width"
+      @opened="opened" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
       <el-collapse v-model="activeOptions">
