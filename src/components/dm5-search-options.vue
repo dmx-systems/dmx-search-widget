@@ -29,13 +29,13 @@ export default {
 
   props: {
     model: Object,
-    types: Array      // types listed in menu (array of dm5.TopicType/dm5.AssocType)
+    types: Array              // types listed in menu (array of dm5.TopicType/dm5.AssocType)
   },
 
   data () {
     return {
       typeDialogVisible: false,
-      prevType: undefined    // previously selected type in menu (dm5.TopicType/dm5.AssocType)
+      prevType: undefined     // previously selected type in menu (dm5.TopicType/dm5.AssocType)
     }
   },
 

@@ -3,14 +3,14 @@
       @opened="opened" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
-      <el-collapse v-model="activeOptions">
+      <el-collapse v-model="expandedFilters">
         <el-collapse-item title="Topic Filter" :name="0">
-          <dm5-search-options :model="topicOptions" :types="searchTopicTypes" ref="topicOptions"
+          <dm5-search-options :model="topicFilter" :types="searchTopicTypes" ref="topicFilter"
             @search="search" @create="clickCreateButton">
           </dm5-search-options>
         </el-collapse-item>
         <el-collapse-item title="Association Filter">
-          <dm5-search-options :model="assocOptions" :types="searchAssocTypes" ref="assocOptions"
+          <dm5-search-options :model="assocFilter" :types="searchAssocTypes" ref="assocFilter"
             @search="search" @create="clickCreateButton">
           </dm5-search-options>
         </el-collapse-item>
@@ -77,7 +77,7 @@ export default {
     markerIds: Array,         // Optional: IDs of topics to render as "marked" in result list
     // create
     createEnabled: Boolean,   // whether the create-panel is rendered
-    createTopicTypes: Array,  // types listed in create menu (array of dm5.TopicType)
+    createTopicTypes: Array,  // topic types listed in create menu (array of dm5.TopicType)
     topicmapTypes: Array,     // topicmap types listed in create menu
     extraMenuItems: Array
   },
@@ -87,8 +87,8 @@ export default {
       // dialog
       customClass: `dm5-search-widget ${this.layout}`,
       // search
-      activeOptions: [0],
-      topicOptions: {
+      expandedFilters: [0],
+      topicFilter: {
         label: 'Restrict by topic type',
         typesFunc: dm5.typeCache.getAllTopicTypes,    // evaluated lazily in dm5-type-dialog.vue
         input: '',
@@ -96,7 +96,7 @@ export default {
         check2: false,
         type: undefined,      // selected type (dm5.TopicType); undefined if no type is selected
       },
-      assocOptions: {
+      assocFilter: {
         label: 'Restrict by association type',
         typesFunc: dm5.typeCache.getAllAssocTypes,    // evaluated lazily in dm5-type-dialog.vue
         input: '',
@@ -126,7 +126,7 @@ export default {
   computed: {
 
     input () {
-      return this.topicOptions.input
+      return this.topicFilter.input
     },
 
     trimmedInput () {
@@ -136,37 +136,37 @@ export default {
     // Topic Filter
 
     isTopicFilterSet () {
-      return this.$refs.topicOptions.isSet
+      return this.$refs.topicFilter.isSet
     },
 
     topicQuery () {
-      return this.$refs.topicOptions.query
+      return this.$refs.topicFilter.query
     },
 
     topicTypeUri () {
-      return this.$refs.topicOptions.typeUri
+      return this.$refs.topicFilter.typeUri
     },
 
     topicCheck2 () {
-      return this.topicOptions.check2
+      return this.topicFilter.check2
     },
 
     // Assoc Filter
 
     isAssocFilterSet () {
-      return this.$refs.assocOptions.isSet
+      return this.$refs.assocFilter.isSet
     },
 
     assocQuery () {
-      return this.$refs.assocOptions.query
+      return this.$refs.assocFilter.query
     },
 
     assocTypeUri () {
-      return this.$refs.assocOptions.typeUri
+      return this.$refs.assocFilter.typeUri
     },
 
     assocCheck2 () {
-      return this.assocOptions.check2
+      return this.assocFilter.check2
     },
 
     // Create
@@ -204,7 +204,7 @@ export default {
   methods: {
 
     opened () {
-      this.$refs.topicOptions.focus()
+      this.$refs.topicFilter.focus()
       this.search()
       // update isAdmin state
       dm5.isAdmin().then(isAdmin => {
