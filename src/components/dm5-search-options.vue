@@ -6,7 +6,7 @@
       <!-- "Search" menu -->
       <el-select v-model="model.type" value-key="uri" :disabled="!model.check1">
         <el-option-group>
-          <el-option v-for="type in types" :label="type.value" :value="type" :key="type.uri">
+          <el-option v-for="type in sortedTypes" :label="type.value" :value="type" :key="type.uri">
             <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
           </el-option>
         </el-option-group>
@@ -43,6 +43,10 @@ export default {
 
     query () {
       return dm5.utils.fulltextQuery(this.model.input)
+    },
+
+    sortedTypes () {
+      return this.types.sort((t1, t2) => t1.value.localeCompare(t2.value))
     },
 
     typeUri () {
@@ -102,7 +106,6 @@ export default {
     checked (type) {
       // console.log('checked', type)
       this.types.push(type)
-      this.types.sort((tt1, tt2) => tt1.value.localeCompare(tt2.value))
     },
 
     unchecked (type) {

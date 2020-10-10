@@ -10,7 +10,7 @@
           </dm5-search-options>
         </el-collapse-item>
         <el-collapse-item title="Association Filter">
-          <dm5-search-options :model="assocFilter" :types="searchAssocTypes" ref="assocFilter"
+          <dm5-search-options :model="assocFilter" :types="searchAssocTypes_" ref="assocFilter"
             @search="search" @create="clickCreateButton">
           </dm5-search-options>
         </el-collapse-item>
@@ -74,6 +74,7 @@ export default {
       validator: layout => ['row', 'column'].includes(layout)
     },
     // search
+    searchAssocTypes: Array,  // assoc types listed in search menu (array of dm5.AssocType)
     markerIds: Array,         // Optional: IDs of topics to render as "marked" in result list
     // create
     createEnabled: Boolean,   // whether the create-panel is rendered
@@ -105,7 +106,6 @@ export default {
         type: undefined,      // selected type (dm5.AssocType); undefined if no type is selected
       },
       searchTopicTypes: undefined,      // topic types listed in search menu (array of dm5.TopicType)
-      searchAssocTypes: [],             // assoc types listed in search menu (array of dm5.AssocType)
       resultTopics: [],
       resultVisible: false,
       // create
@@ -114,6 +114,7 @@ export default {
                               // Undefined if no item is selected.
       // mirror props
       visible_:          this.visible,
+      searchAssocTypes_: this.searchAssocTypes,
       markerIds_:        this.markerIds,
       createEnabled_:    this.createEnabled,
       createTopicTypes_: this.createTopicTypes,
