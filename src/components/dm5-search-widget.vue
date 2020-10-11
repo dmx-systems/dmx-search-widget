@@ -1,8 +1,8 @@
 <template>
-  <el-dialog :modal="false" :custom-class="customClass" :visible="visible_" :width="width" v-draggable
+  <el-dialog :title="title" :custom-class="customClass" :visible="visible_" :width="width" :modal="false" v-draggable
       @opened="opened" @close="close">
     <div class="search">
-      <div class="heading label">Search</div>
+      <div class="heading label" v-if="createEnabled_">Search</div>
       <el-collapse v-model="expandedFilters">
         <el-collapse-item title="Topic Filter" :name="0">
           <dm5-search-options :model="topicFilter" :types="searchTopicTypes" ref="topicFilter"
@@ -125,6 +125,10 @@ export default {
   },
 
   computed: {
+
+    title () {
+      return 'Search' + (this.createEnabled_ ? ' / Create' : '')
+    },
 
     input () {
       return this.topicFilter.input
