@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :modal="false" :custom-class="customClass" :visible="visible_" :width="width"
+  <el-dialog :modal="false" :custom-class="customClass" :visible="visible_" :width="width" v-draggable
       @opened="opened" @close="close">
     <div class="search">
       <div class="heading label">Search</div>
@@ -339,7 +339,7 @@ export default {
 }
 
 .dm5-search-widget .search .el-collapse {
-  background-color: var(--background-color) !important;
+  background-color: var(--background-color);
 }
 
 .dm5-search-widget .search .dm5-topic-list {
