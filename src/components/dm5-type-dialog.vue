@@ -1,6 +1,6 @@
 <template>
   <el-dialog custom-class="dm5-type-dialog" :visible="visible" title="Customize Type List" width="40%" append-to-body
-      @close="close">
+      :modal="false" v-draggable @close="close">
     <el-checkbox v-for="type in types" :value="checked(type)" :key="type.uri" @input="input(type, $event)">
       <span>{{type.value}}</span><span class="fa icon">{{type.icon}}</span>
     </el-checkbox>
