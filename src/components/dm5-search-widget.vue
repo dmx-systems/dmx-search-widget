@@ -227,7 +227,7 @@ export default {
         console.log('search',
           this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
         )
-        dm5.restClient.queryRelatedTopicsFulltext(
+        dm5.restClient.query(
           this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
         ).then(result => {
           if (this.isResultUptodate(result)) {
