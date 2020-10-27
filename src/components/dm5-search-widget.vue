@@ -16,7 +16,7 @@
         </el-collapse-item>
       </el-collapse>
       <dm5-topic-list :topics="resultTopics" topics-label="Result" empty-text="No Result" v-if="resultVisible"
-        :marker-ids="markerIds_" @topic-click="topicClick" @icon-click="iconClick">
+        :marker-ids="markerIds_" @topic-click="topicClick" @icon-click="iconClick" @assoc-click="assocClick">
       </dm5-topic-list>
     </div>
     <div class="create" v-if="createEnabled_">
@@ -227,7 +227,7 @@ export default {
         console.log('search',
           this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
         )
-        dm5.restClient.queryRelatedTopicsFulltext(
+        dm5.restClient.query(
           this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
         ).then(result => {
           if (this.isResultUptodate(result)) {
@@ -262,14 +262,18 @@ export default {
     },
 
     topicClick (topic) {
-      // Note: if assoc filter is set `topic` is a rel-topic (and thus contains an assoc as well)
-      this.$emit(this.isAssocFilterSet ? 'assoc-click' : 'topic-click', topic)
+      this.$emit('topic-click', topic)
       this.close()
     },
 
     iconClick (topic) {
       this.$emit('icon-click', topic)
       // leave dialog open # TODO?
+    },
+
+    assocClick (assoc) {
+      this.$emit('assoc-click', assoc)
+      this.close()
     },
 
     type (extraItem) {
