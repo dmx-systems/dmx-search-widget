@@ -16,7 +16,8 @@
         </el-collapse-item>
       </el-collapse>
       <dm5-topic-list :topics="resultTopics" topics-label="Result" empty-text="No Result" v-if="resultVisible"
-        :marker-topic-ids="markerTopicIds_" @topic-click="topicClick" @icon-click="iconClick" @assoc-click="assocClick">
+        :marker-topic-ids="markerTopicIds_" :marker-assoc-ids="markerAssocIds_"
+        @topic-click="topicClick" @icon-click="iconClick" @assoc-click="assocClick">
       </dm5-topic-list>
     </div>
     <div class="create" v-if="createEnabled_">
@@ -76,6 +77,7 @@ export default {
     // search
     searchAssocTypes: Array,  // assoc types listed in search menu (array of dm5.AssocType)
     markerTopicIds: Array,    // Optional: IDs of topics to render as "marked" in result list
+    markerAssocIds: Array,    // Optional: IDs of assocs to render as "marked" in result list
     // create
     createEnabled: Boolean,   // whether the create-panel is rendered
     createTopicTypes: Array,  // topic types listed in create menu (array of dm5.TopicType)
@@ -116,6 +118,7 @@ export default {
       visible_:          this.visible,
       searchAssocTypes_: this.searchAssocTypes,
       markerTopicIds_:   this.markerTopicIds,
+      markerAssocIds_:   this.markerAssocIds,
       createEnabled_:    this.createEnabled,
       createTopicTypes_: this.createTopicTypes,
       extraMenuItems_:   this.extraMenuItems,
