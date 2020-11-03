@@ -108,7 +108,7 @@ export default {
         type: undefined,      // selected type (dm5.AssocType); undefined if no type is selected
       },
       searchTopicTypes: undefined,      // topic types listed in search menu (array of dm5.TopicType)
-      resultTopics: [],
+      resultTopics: [],       // TODO: rename "resultObjects"
       resultVisible: false,
       // create
       menuItem: undefined,    // Selected item of create menu.
@@ -234,7 +234,7 @@ export default {
           this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
         ).then(result => {
           if (this.isResultUptodate(result)) {
-            this.resultTopics = result.topics
+            this.resultTopics = result.objects
             this.resultVisible = true
           }
         }).catch(e => {
