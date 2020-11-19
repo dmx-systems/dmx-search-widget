@@ -54,12 +54,16 @@ export default {
       return this.model.check1 && this.model.type && this.model.type.uri || undefined
     },
 
+    isQuerySet () {
+      return this.query && this.query !== '*'
+    },
+
     isSet () {
-      return this.query || this.typeUri
+      return this.isQuerySet || this.typeUri
     },
 
     check2Disabled () {
-      return !this.query || !this.typeUri
+      return !this.isQuerySet || !this.typeUri
     }
   },
 
