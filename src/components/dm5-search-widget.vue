@@ -230,7 +230,7 @@ export default {
         console.log('search',
           this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
         )
-        dm5.restClient.query(
+        dm5.rpc.query(
           this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
         ).then(result => {
           if (this.isResultUptodate(result)) {
