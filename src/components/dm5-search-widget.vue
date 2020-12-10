@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import dm5 from 'dmx-api'
+import dmx from 'dmx-api'
 
 export default {
 
@@ -75,12 +75,12 @@ export default {
       validator: layout => ['row', 'column'].includes(layout)
     },
     // search
-    searchAssocTypes: Array,  // assoc types listed in search menu (array of dm5.AssocType)
+    searchAssocTypes: Array,  // assoc types listed in search menu (array of dmx.AssocType)
     markerTopicIds: Array,    // Optional: IDs of topics to render as "marked" in result list
     markerAssocIds: Array,    // Optional: IDs of assocs to render as "marked" in result list
     // create
     createEnabled: Boolean,   // whether the create-panel is rendered
-    createTopicTypes: Array,  // topic types listed in create menu (array of dm5.TopicType)
+    createTopicTypes: Array,  // topic types listed in create menu (array of dmx.TopicType)
     topicmapTypes: Array,     // topicmap types listed in create menu
     extraMenuItems: Array
   },
@@ -93,26 +93,26 @@ export default {
       expandedFilters: [0],
       topicFilter: {
         label: 'Restrict by topic type',
-        typesFunc: dm5.typeCache.getAllTopicTypes,    // evaluated lazily in dm5-type-dialog.vue
+        typesFunc: dmx.typeCache.getAllTopicTypes,    // evaluated lazily in dm5-type-dialog.vue
         input: '',
         check1: false,
         check2: false,
-        type: undefined,      // selected type (dm5.TopicType); undefined if no type is selected
+        type: undefined,      // selected type (dmx.TopicType); undefined if no type is selected
       },
       assocFilter: {
         label: 'Restrict by association type',
-        typesFunc: dm5.typeCache.getAllAssocTypes,    // evaluated lazily in dm5-type-dialog.vue
+        typesFunc: dmx.typeCache.getAllAssocTypes,    // evaluated lazily in dm5-type-dialog.vue
         input: '',
         check1: false,
         check2: false,
-        type: undefined,      // selected type (dm5.AssocType); undefined if no type is selected
+        type: undefined,      // selected type (dmx.AssocType); undefined if no type is selected
       },
-      searchTopicTypes: undefined,      // topic types listed in search menu (array of dm5.TopicType)
+      searchTopicTypes: undefined,      // topic types listed in search menu (array of dmx.TopicType)
       resultTopics: [],       // TODO: rename "resultObjects"
       resultVisible: false,
       // create
       menuItem: undefined,    // Selected item of create menu.
-                              // Either a dm5.TopicType or an extra menu item (Object).
+                              // Either a dmx.TopicType or an extra menu item (Object).
                               // Undefined if no item is selected.
       // mirror props
       visible_:          this.visible,
@@ -215,7 +215,7 @@ export default {
       this.$refs.topicFilter.focus()
       this.search()
       // update isAdmin state
-      dm5.isAdmin().then(isAdmin => {
+      dmx.isAdmin().then(isAdmin => {
         this.isAdmin = isAdmin
         // create menu: remove selection if item is disabled meanwhile
         if (this.menuItem && this.disabled(this.menuItem)) {
@@ -224,13 +224,10 @@ export default {
       })
     },
 
-    search: dm5.utils.debounce(function () {
+    search: dmx.utils.debounce(function () {
       // compare to dm5-text-field.vue (module dm5-object-renderer)
       if (this.isTopicFilterSet || this.isAssocFilterSet) {
-        console.log('search',
-          this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
-        )
-        dm5.rpc.query(
+        dmx.rpc.query(
           this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
         ).then(result => {
           if (this.isResultUptodate(result)) {
@@ -280,7 +277,7 @@ export default {
     },
 
     type (extraItem) {
-      return dm5.typeCache.getTopicType(extraItem.uri)
+      return dmx.typeCache.getTopicType(extraItem.uri)
     },
 
     disabled (extraItem) {

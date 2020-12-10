@@ -23,26 +23,26 @@
 </template>
 
 <script>
-import dm5 from 'dmx-api'
+import dmx from 'dmx-api'
 
 export default {
 
   props: {
     model: Object,
-    types: Array              // types listed in menu (array of dm5.TopicType/dm5.AssocType)
+    types: Array              // types listed in menu (array of dmx.TopicType/dmx.AssocType)
   },
 
   data () {
     return {
       typeDialogVisible: false,
-      prevType: undefined     // previously selected type in menu (dm5.TopicType/dm5.AssocType)
+      prevType: undefined     // previously selected type in menu (dmx.TopicType/dmx.AssocType)
     }
   },
 
   computed: {
 
     query () {
-      return dm5.utils.fulltextQuery(this.model.input)
+      return dmx.utils.fulltextQuery(this.model.input)
     },
 
     sortedTypes () {
