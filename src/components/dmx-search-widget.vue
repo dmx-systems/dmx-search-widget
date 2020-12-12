@@ -5,20 +5,20 @@
       <div class="heading label" v-if="createEnabled_">Search</div>
       <el-collapse v-model="expandedFilters">
         <el-collapse-item title="Topic Filter" :name="0">
-          <dm5-search-options :model="topicFilter" :types="searchTopicTypes" ref="topicFilter"
+          <dmx-search-options :model="topicFilter" :types="searchTopicTypes" ref="topicFilter"
             @search="search" @create="clickCreateButton">
-          </dm5-search-options>
+          </dmx-search-options>
         </el-collapse-item>
         <el-collapse-item title="Association Filter">
-          <dm5-search-options :model="assocFilter" :types="searchAssocTypes_" ref="assocFilter"
+          <dmx-search-options :model="assocFilter" :types="searchAssocTypes_" ref="assocFilter"
             @search="search" @create="clickCreateButton">
-          </dm5-search-options>
+          </dmx-search-options>
         </el-collapse-item>
       </el-collapse>
-      <dm5-topic-list :topics="resultTopics" topics-label="Result" empty-text="No Result" v-if="resultVisible"
+      <dmx-topic-list :topics="resultTopics" topics-label="Result" empty-text="No Result" v-if="resultVisible"
         :marker-topic-ids="markerTopicIds_" :marker-assoc-ids="markerAssocIds_"
         @topic-click="topicClick" @icon-click="iconClick" @assoc-click="assocClick">
-      </dm5-topic-list>
+      </dmx-topic-list>
     </div>
     <div class="create" v-if="createEnabled_">
       <div class="heading label">Create</div>
@@ -322,8 +322,8 @@ export default {
   },
 
   components: {
-    'dm5-topic-list':     require('dmx-topic-list').default,
-    'dm5-search-options': require('./dm5-search-options').default
+    'dmx-topic-list':     require('dmx-topic-list').default,
+    'dmx-search-options': require('./dmx-search-options').default
   }
 }
 </script>

@@ -16,9 +16,9 @@
       </el-select>
     </div>
     <el-checkbox v-model="model.check2" :disabled="check2Disabled">Widen search to child topics</el-checkbox>
-    <dm5-type-dialog :visible="typeDialogVisible" :types-func="model.typesFunc" :checked-types="types"
+    <dmx-type-dialog :visible="typeDialogVisible" :types-func="model.typesFunc" :checked-types="types"
       @close="closeTypeDialog" @checked="checked" @unchecked="unchecked">
-    </dm5-type-dialog>
+    </dmx-type-dialog>
   </div>
 </template>
 
@@ -124,7 +124,7 @@ export default {
   },
 
   components: {
-    'dm5-type-dialog': require('./dm5-type-dialog').default
+    'dmx-type-dialog': require('./dmx-type-dialog').default
   }
 }
 </script>
