@@ -1,5 +1,5 @@
 <template>
-  <el-dialog custom-class="dm5-type-dialog" :visible="visible" title="Customize Type List" width="40%" append-to-body
+  <el-dialog custom-class="dmx-type-dialog" :visible="visible" title="Customize Type List" width="40%" append-to-body
       :modal="false" v-draggable @close="close">
     <el-checkbox v-for="type in types" :value="checked(type)" :key="type.uri" @input="input(type, $event)">
       <span>{{type.value}}</span><span class="fa icon">{{type.icon}}</span>
@@ -41,12 +41,12 @@ export default {
 </script>
 
 <style>
-.dm5-type-dialog .el-checkbox {
+.dmx-type-dialog .el-checkbox {
   display: block;
   line-height: 1.5;
 }
 
-.dm5-type-dialog .el-checkbox .icon {
+.dmx-type-dialog .el-checkbox .icon {
   color: var(--color-topic-icon);
   margin-left: var(--icon-spacing);
 }

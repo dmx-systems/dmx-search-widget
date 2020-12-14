@@ -88,7 +88,7 @@ export default {
   data () {
     return {
       // dialog
-      customClass: `dm5-search-widget ${this.layout}`,
+      customClass: `dmx-search-widget ${this.layout}`,
       // search
       expandedFilters: [0],
       topicFilter: {
@@ -329,51 +329,51 @@ export default {
 </script>
 
 <style>
-.dm5-search-widget .el-dialog__body {
+.dmx-search-widget .el-dialog__body {
   display: flex;
 }
 
-.dm5-search-widget.column .el-dialog__body {
+.dmx-search-widget.column .el-dialog__body {
   flex-direction: column;
 }
 
-.dm5-search-widget .heading {
+.dmx-search-widget .heading {
   border-bottom: 1px solid var(--border-color);
   margin-bottom: 1.5em;
 }
 
-.dm5-search-widget .search {
+.dmx-search-widget .search {
   flex: auto;
 }
 
-.dm5-search-widget .search .el-collapse {
+.dmx-search-widget .search .el-collapse {
   background-color: var(--background-color);
 }
 
-.dm5-search-widget .search .dm5-topic-list {
+.dmx-search-widget .search .dmx-topic-list {
   margin-top: 2em;
 }
 
-.dm5-search-widget.row .create {
+.dmx-search-widget.row .create {
   margin-left: 3em;
 }
 
-.dm5-search-widget.column .create {
+.dmx-search-widget.column .create {
   margin-top: 3em;
 }
 
-.dm5-search-widget .create .options {
+.dmx-search-widget .create .options {
   margin-top: 1.5em;
 }
 
-.dm5-search-widget .create .create-button {
+.dmx-search-widget .create .create-button {
   display: block;
   margin-top: 1.5em;
 }
 
 /* Element UI */
 
-.dm5-search-widget .search .el-collapse-item__header {
+.dmx-search-widget .search .el-collapse-item__header {
   color: var(--label-color);            /* was #303133 */
   background-color: unset;              /* was #fff */
   font-size: var(--label-font-size);    /* was 13px */
@@ -382,11 +382,11 @@ export default {
   height: 24px;                         /* was 48px */
 }
 
-.dm5-search-widget .search .el-collapse-item__wrap {
+.dmx-search-widget .search .el-collapse-item__wrap {
   background-color: unset;              /* was #fff */
 }
 
-.dm5-search-widget .search .el-collapse-item__content {
+.dmx-search-widget .search .el-collapse-item__content {
   padding: 0 12px 24px 12px;            /* was padding-bottom: 25px */
   font-size: unset;                     /* was 13px */
   line-height: unset;                   /* was 1.769230769230769 */

@@ -1,5 +1,5 @@
 <template>
-  <div class="dm5-search-options">
+  <div class="dmx-search-options">
     <el-input v-model="model.input" ref="input" @keyup.native.enter="$emit('create')"></el-input>
     <div class="type-select">
       <el-checkbox v-model="model.check1">{{model.label}}</el-checkbox>
@@ -130,16 +130,16 @@ export default {
 </script>
 
 <style>
-.dm5-search-options .type-select {
+.dmx-search-options .type-select {
   margin-top: 6px;
   margin-bottom: 2px;
 }
 
-.dm5-search-options .type-select .el-select {
+.dmx-search-options .type-select .el-select {
   margin-left: 6px;
 }
 
-.dm5-search-options .el-checkbox__label {
+.dmx-search-options .el-checkbox__label {
   font-size: var(--label-font-size);
   color:     var(--label-color);
 }
