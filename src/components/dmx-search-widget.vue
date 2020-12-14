@@ -58,11 +58,11 @@ import dmx from 'dmx-api'
 export default {
 
   created () {
-    // console.log('dm5-search-widget created', this.visible_, this.createTopicTypes)
+    // console.log('dmx-search-widget created', this.visible_, this.createTopicTypes)
   },
 
   mounted () {
-    // console.log('dm5-search-widget mounted', this.visible_, this.createTopicTypes)
+    // console.log('dmx-search-widget mounted', this.visible_, this.createTopicTypes)
   },
 
   props: {
@@ -93,7 +93,7 @@ export default {
       expandedFilters: [0],
       topicFilter: {
         label: 'Restrict by topic type',
-        typesFunc: dmx.typeCache.getAllTopicTypes,    // evaluated lazily in dm5-type-dialog.vue
+        typesFunc: dmx.typeCache.getAllTopicTypes,    // evaluated lazily in dmx-type-dialog.vue
         input: '',
         check1: false,
         check2: false,
@@ -101,7 +101,7 @@ export default {
       },
       assocFilter: {
         label: 'Restrict by association type',
-        typesFunc: dmx.typeCache.getAllAssocTypes,    // evaluated lazily in dm5-type-dialog.vue
+        typesFunc: dmx.typeCache.getAllAssocTypes,    // evaluated lazily in dmx-type-dialog.vue
         input: '',
         check1: false,
         check2: false,
@@ -225,7 +225,7 @@ export default {
     },
 
     search: dmx.utils.debounce(function () {
-      // compare to dm5-text-field.vue (module dm5-object-renderer)
+      // compare to dmx-text-field.vue (module dmx-object-renderer)
       if (this.isTopicFilterSet || this.isAssocFilterSet) {
         dmx.rpc.query(
           this.topicQuery, this.topicTypeUri, this.topicCheck2, this.assocQuery, this.assocTypeUri, this.assocCheck2
