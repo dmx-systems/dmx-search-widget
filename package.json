@@ -7,9 +7,9 @@
   "main": "src/components/dmx-search-widget.vue",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jri/dm5-search-widget.git"
+    "url": "https://github.com/dmx-systems/dmx-search-widget.git"
   },
   "dependencies": {
-    "dmx-topic-list": "https://github.com/jri/dm5-topic-list.git"
+    "dmx-topic-list": "https://github.com/dmx-systems/dmx-topic-list.git"
   }
 }
