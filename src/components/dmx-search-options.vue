@@ -52,6 +52,7 @@ export default {
     typeUri () {
       // Note: if checkbox is unchecked undefined must be passed to REST client (instead of false)
       return this.model.check1 && this.model.type && this.model.type.uri || undefined
+      /* eslint no-mixed-operators: "off" */
     },
 
     isQuerySet () {
@@ -69,8 +70,8 @@ export default {
 
   watch: {
 
-    "model.type": function () {
-      if (this.model.type === "customize") {
+    'model.type': function () {
+      if (this.model.type === 'customize') {
         this.model.type = this.prevType             // Note: retriggers this watcher
         this.openTypeDialog()
       } else {
@@ -86,7 +87,7 @@ export default {
       this.$emit('search')
     },
 
-    "model.check2": function () {
+    'model.check2': function () {
       this.$emit('search')
     }
   },

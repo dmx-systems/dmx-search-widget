@@ -97,7 +97,7 @@ export default {
         input: '',
         check1: false,
         check2: false,
-        type: undefined,      // selected type (dmx.TopicType); undefined if no type is selected
+        type: undefined       // selected type (dmx.TopicType); undefined if no type is selected
       },
       assocFilter: {
         label: 'Restrict by association type',
@@ -105,7 +105,7 @@ export default {
         input: '',
         check1: false,
         check2: false,
-        type: undefined,      // selected type (dmx.AssocType); undefined if no type is selected
+        type: undefined       // selected type (dmx.AssocType); undefined if no type is selected
       },
       searchTopicTypes: undefined,      // topic types listed in search menu (array of dmx.TopicType)
       resultTopics: [],       // TODO: rename "resultObjects"
@@ -195,7 +195,7 @@ export default {
   watch: {
 
     // needed when instantiated via template
-    visible ()          {this.visible_          = this.visible},
+    visible ()          {this.visible_          = this.visible},                       /* eslint block-spacing: "off" */
     createEnabled ()    {this.createEnabled_    = this.createEnabled},
     createTopicTypes () {this.createTopicTypes_ = this.createTopicTypes},
     // FIXME: add watchers for the remaining props?
@@ -254,11 +254,11 @@ export default {
           result.searchAssocChildren === this.assocCheck2) {
         return true
       }
-      console.log("Ignoring " + result.topics.length + " result topics of query\n\"" + result.topicQuery + "\" (" +
-        result.topicTypeUri + ", " + result.searchTopicChildren + ") \"" + result.assocQuery + "\" (" +
-        result.assocTypeUri + ", " + result.searchAssocChildren + "), current query is\n\"" + this.topicQuery + "\" (" +
-        this.topicTypeUri + ", " + this.topicCheck2 + ") \"" + this.assocQuery + "\" (" +
-        this.assocTypeUri + ", " + this.assocCheck2 + ")")
+      console.log('Ignoring ' + result.topics.length + ' result topics of query\n"' + result.topicQuery + '" (' +
+        result.topicTypeUri + ', ' + result.searchTopicChildren + ') "' + result.assocQuery + '" (' +
+        result.assocTypeUri + ', ' + result.searchAssocChildren + '), current query is\n"' + this.topicQuery + '" (' +
+        this.topicTypeUri + ', ' + this.topicCheck2 + ') "' + this.assocQuery + '" (' +
+        this.assocTypeUri + ', ' + this.assocCheck2 + ')')
     },
 
     topicClick (topic) {
