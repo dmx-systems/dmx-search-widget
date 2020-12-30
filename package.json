@@ -1,6 +1,6 @@
 {
   "name": "dmx-search-widget",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "The DMX 5 search/create widget as a composable GUI component",
   "author": "Jörg Richter <jri@dmx.berlin>",
   "license": "AGPL-3.0",
@@ -10,6 +10,6 @@
     "url": "https://github.com/dmx-systems/dmx-search-widget.git"
   },
   "dependencies": {
-    "dmx-topic-list": "https://github.com/dmx-systems/dmx-topic-list.git"
+    "dmx-topic-list": "2.0.0"
   }
 }

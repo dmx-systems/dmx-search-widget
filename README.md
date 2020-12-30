@@ -2,6 +2,24 @@
 
 ## Version History
 
+**2.0** -- Dec 30, 2020
+
+* BREAKING CHANGES
+    * Make use of `dmx-api` 2.0
+    * Rename component attribute `create-topic-types` (was `menu-topic-types`)
+    * Rename component attribute `marker-topic-ids` (was `marker-ids`)
+    * Various `dm5` -> `dmx` renamings
+* Feature: **Association Search**
+    * Emit `assoc-click` event
+    * Add component attribute `search-assoc-types`
+    * Add component attribute `marker-assoc-ids`
+* Improvements:
+    * Make search dialog movable and remove mask
+    * Make "Customize" dialogs movable and remove mask
+* Chore:
+    * Adapt URLs to `github.com/dmx-systems`
+    * Code run through `eslint`
+
 **1.0.1** -- Aug 5, 2020
 
 * Chore:
@@ -28,7 +46,7 @@
 
 **0.27** -- Nov 22, 2019
 
-* Feature: Advanced Search
+* Feature: **Advanced Search**
     * Restrict search result to certain topic type
         * Customizable type menu
     * Optionally include child topics in search
@@ -163,4 +181,4 @@
 
 ------------
 Jörg Richter  
-Aug 5, 2020
+Dec 30, 2020
