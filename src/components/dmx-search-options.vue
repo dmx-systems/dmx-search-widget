@@ -95,7 +95,7 @@ export default {
   methods: {
 
     focus () {
-      this.$refs.input.focus()
+      this.$refs.input.select()
     },
 
     // Type Dialog
