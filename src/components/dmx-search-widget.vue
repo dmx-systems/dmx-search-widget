@@ -23,7 +23,7 @@
     <div class="create" v-if="createEnabled_">
       <div class="heading label">Create</div>
       <!-- "Create" menu -->
-      <el-select v-model="menuItem" value-key="uri" :disabled="!input">
+      <el-select v-model="menuItem" value-key="uri" :disabled="menuDisabled" :title="menuTitle">
         <el-option-group label="Topic Type">
           <el-option v-for="type in createTopicTypes_" :label="type.value" :value="type" :key="type.uri">
             <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
@@ -44,7 +44,7 @@
       <!-- "Create" options -->
       <component :is="optionsComp" class="options" ref="optionsComp"></component>
       <!-- "Create" button -->
-      <el-button class="create-button" ref="create" type="primary" plain :disabled="!input || !menuItem"
+      <el-button class="create-button" ref="create" type="primary" plain :disabled="buttonDisabled" :title="buttonTitle"
         @click="create">{{buttonLabel}}
       </el-button>
     </div>
@@ -200,6 +200,28 @@ export default {
         label = this.menuItem ? this.menuItem.value : ''
       }
       return 'Create' + (label ? ' ' + label : '')
+    },
+
+    menuDisabled () {
+      return !this.trimmedInput
+    },
+
+    menuTitle () {
+      if (!this.trimmedInput) {
+        return 'Not active because nothing is typed into "Topic Filter" (left side)'
+      }
+    },
+
+    buttonDisabled () {
+      return !this.trimmedInput || !this.menuItem
+    },
+
+    buttonTitle () {
+      if (!this.trimmedInput) {
+        return 'Not active because nothing is typed into "Topic Filter" (left side)'
+      } else if (!this.menuItem) {
+        return 'Not active because nothing is selected from above menu'
+      }
     }
   },
 
