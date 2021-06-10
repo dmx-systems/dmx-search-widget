@@ -29,12 +29,12 @@
             <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
           </el-option>
         </el-option-group>
-        <el-option-group label="View">
+        <el-option-group label="Topicmap Type">
           <el-option v-for="maptype in topicmapTypes" :label="maptype.name" :value="maptype" :key="maptype.uri">
             <span class="fa icon">{{type(maptype).icon}}</span><span>{{maptype.name}}</span>
           </el-option>
         </el-option-group>
-        <el-option-group label="DMX">
+        <el-option-group label="Meta">
           <el-option v-for="item in extraMenuItems_" :label="type(item).value" :value="item" :key="item.uri"
               :disabled="disabled(item)">
             <span class="fa icon">{{type(item).icon}}</span><span>{{type(item).value}}</span>
