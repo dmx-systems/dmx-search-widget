@@ -22,10 +22,9 @@
     </div>
     <div class="create" v-if="createEnabled_">
       <div class="heading label">Create</div>
-      <div class="field-label">Topic Type</div>
       <!-- "Create" menu -->
       <el-select v-model="menuItem" value-key="uri" :disabled="!input">
-        <el-option-group>
+        <el-option-group label="Topic Type">
           <el-option v-for="type in createTopicTypes_" :label="type.value" :value="type" :key="type.uri">
             <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
           </el-option>
@@ -46,7 +45,7 @@
       <component :is="optionsComp" class="options" ref="optionsComp"></component>
       <!-- "Create" button -->
       <el-button class="create-button" ref="create" type="primary" plain :disabled="!input || !menuItem"
-        @click="create">Create
+        @click="create">{{buttonLabel}}
       </el-button>
     </div>
   </el-dialog>
@@ -112,7 +111,7 @@ export default {
       resultVisible: false,
       // create
       menuItem: undefined,    // Selected item of create menu.
-                              // Either a dmx.TopicType or an extra menu item (Object).
+                              // Either a dmx.TopicType, a topicmap type (Object), or an extra menu item (Object).
                               // Undefined if no item is selected.
       // mirror props
       visible_:          this.visible,
@@ -189,6 +188,18 @@ export default {
 
     isExtraMenuItem () {
       return this.menuItem && this.menuItem.create
+    },
+
+    buttonLabel () {
+      let label
+      if (this.isTopicmapType) {
+        label = this.menuItem.name
+      } else if (this.isExtraMenuItem) {
+        label = this.type(this.menuItem).value
+      } else {
+        label = this.menuItem ? this.menuItem.value : ''
+      }
+      return 'Create' + (label ? ' ' + label : '')
     }
   },
 
