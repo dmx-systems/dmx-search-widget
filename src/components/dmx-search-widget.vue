@@ -287,11 +287,11 @@ export default {
           result.searchAssocChildren === this.assocCheck2) {
         return true
       }
-      console.log('Ignoring ' + result.topics.length + ' result topics of query\n"' + result.topicQuery + '" (' +
+      /* console.log('Ignoring ' + result.topics.length + ' result topics of query\n"' + result.topicQuery + '" (' +
         result.topicTypeUri + ', ' + result.searchTopicChildren + ') "' + result.assocQuery + '" (' +
         result.assocTypeUri + ', ' + result.searchAssocChildren + '), current query is\n"' + this.topicQuery + '" (' +
         this.topicTypeUri + ', ' + this.topicCheck2 + ') "' + this.assocQuery + '" (' +
-        this.assocTypeUri + ', ' + this.assocCheck2 + ')')
+        this.assocTypeUri + ', ' + this.assocCheck2 + ')') */
     },
 
     topicClick (topic) {
