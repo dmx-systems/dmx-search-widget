@@ -2,6 +2,15 @@
 
 ## Version History
 
+**2.1** -- Jun 15, 2021
+
+* Improvements:
+    * Improved Create panel UI (wording, tooltips)
+* Fixes:
+    * Text input (topic filter) is selected when dialog opens
+* Chore:
+    * Remove debug log
+
 **2.0** -- Dec 30, 2020
 
 * BREAKING CHANGES
@@ -178,7 +187,3 @@
 **0.2** -- Jun 30, 2017
 
 **0.1** -- Jun 14, 2017
-
-------------
-Jörg Richter  
-Dec 30, 2020
