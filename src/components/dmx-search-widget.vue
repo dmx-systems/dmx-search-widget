@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" :custom-class="customClass" :visible="visible_" :width="width" :modal="false" v-draggable
+  <el-dialog :title="title" :custom-class="customClass" :visible="visible_" :width="width" :modal="false"
       @opened="opened" @close="close">
     <div class="search">
       <div class="heading label" v-if="createEnabled_">Search</div>
