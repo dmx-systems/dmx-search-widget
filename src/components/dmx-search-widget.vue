@@ -1,8 +1,7 @@
 <template>
-  <el-dialog :title="title" :custom-class="customClass" :visible="visible_" :width="width" :modal="false"
-      @opened="opened" @close="close">
+  <el-dialog :title :custom-class :visible :width :modal="false" @opened="opened" @close="close">
     <div class="search">
-      <div class="heading label" v-if="createEnabled_">Search</div>
+      <div class="heading label" v-if="createEnabled">Search</div>
       <el-collapse v-model="expandedFilters">
         <el-collapse-item title="Topic Filter" :name="0">
           <dmx-search-options :model="topicFilter" :types="searchTopicTypes" ref="topicFilter"
@@ -10,22 +9,21 @@
           </dmx-search-options>
         </el-collapse-item>
         <el-collapse-item title="Association Filter">
-          <dmx-search-options :model="assocFilter" :types="searchAssocTypes_" ref="assocFilter"
-            @search="search" @create="clickCreateButton">
+          <dmx-search-options :model="assocFilter" :types="searchAssocTypes" ref="assocFilter" @search="search"
+            @create="clickCreateButton">
           </dmx-search-options>
         </el-collapse-item>
       </el-collapse>
       <dmx-topic-list :topics="resultTopics" topics-label="Result" empty-text="No Result" v-if="resultVisible"
-        :marker-topic-ids="markerTopicIds_" :marker-assoc-ids="markerAssocIds_"
-        @topic-click="topicClick" @icon-click="iconClick" @assoc-click="assocClick">
+        :marker-topic-ids :marker-assoc-ids @topic-click="topicClick" @icon-click="iconClick" @assoc-click="assocClick">
       </dmx-topic-list>
     </div>
-    <div class="create" v-if="createEnabled_">
+    <div class="create" v-if="createEnabled">
       <div class="heading label">Create</div>
       <!-- "Create" menu -->
       <el-select v-model="menuItem" value-key="uri" :disabled="menuDisabled" :title="menuTitle">
         <el-option-group label="Topic Type">
-          <el-option v-for="type in createTopicTypes_" :label="type.value" :value="type" :key="type.uri">
+          <el-option v-for="type in createTopicTypes" :label="type.value" :value="type" :key="type.uri">
             <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
           </el-option>
         </el-option-group>
@@ -35,7 +33,7 @@
           </el-option>
         </el-option-group>
         <el-option-group label="Meta">
-          <el-option v-for="item in extraMenuItems_" :label="type(item).value" :value="item" :key="item.uri"
+          <el-option v-for="item in extraMenuItems" :label="type(item).value" :value="item" :key="item.uri"
               :disabled="disabled(item)">
             <span class="fa icon">{{type(item).icon}}</span><span>{{type(item).value}}</span>
           </el-option>
@@ -55,14 +53,6 @@
 import dmx from 'dmx-api'
 
 export default {
-
-  created () {
-    // console.log('dmx-search-widget created', this.visible_, this.createTopicTypes)
-  },
-
-  mounted () {
-    // console.log('dmx-search-widget mounted', this.visible_, this.createTopicTypes)
-  },
 
   props: {
     // dialog
@@ -113,14 +103,6 @@ export default {
       menuItem: undefined,    // Selected item of create menu.
                               // Either a dmx.TopicType, a topicmap type (Object), or an extra menu item (Object).
                               // Undefined if no item is selected.
-      // mirror props
-      visible_:          this.visible,
-      searchAssocTypes_: this.searchAssocTypes,
-      markerTopicIds_:   this.markerTopicIds,
-      markerAssocIds_:   this.markerAssocIds,
-      createEnabled_:    this.createEnabled,
-      createTopicTypes_: this.createTopicTypes,
-      extraMenuItems_:   this.extraMenuItems,
       //
       isAdmin: false
     }
@@ -129,7 +111,7 @@ export default {
   computed: {
 
     title () {
-      return 'Search' + (this.createEnabled_ ? ' / Create' : '')
+      return 'Search' + (this.createEnabled ? ' / Create' : '')
     },
 
     input () {
@@ -226,18 +208,11 @@ export default {
   },
 
   watch: {
-
-    // needed when instantiated via template
-    visible ()          {this.visible_          = this.visible},                       /* eslint block-spacing: "off" */
-    createEnabled ()    {this.createEnabled_    = this.createEnabled},
-    createTopicTypes () {this.createTopicTypes_ = this.createTopicTypes},
-    // FIXME: add watchers for the remaining props?
-
-    createTopicTypes_ () {
+    createTopicTypes () {
       // Set the initial "search" types the same as the "create" types.
       // Note: at component instantiation the "create" types are not known yet.
       if (!this.searchTopicTypes) {
-        this.searchTopicTypes = this.createTopicTypes_
+        this.searchTopicTypes = this.createTopicTypes
       }
     }
   },
