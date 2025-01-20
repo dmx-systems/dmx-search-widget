@@ -1,11 +1,11 @@
 <template>
-  <el-dialog :title :custom-class :visible :width :modal="false" @opened="opened" @close="close">
+  <el-dialog :title :class="customClass" :model-value="visible" :width :modal="false" @opened="opened" @close="close">
     <div class="search">
       <div class="heading label" v-if="createEnabled">Search</div>
       <el-collapse v-model="expandedFilters">
         <el-collapse-item title="Topic Filter" :name="0">
-          <dmx-search-options :model="topicFilter" :types="searchTopicTypes" ref="topicFilter"
-            @search="search" @create="clickCreateButton">
+          <dmx-search-options :model="topicFilter" :types="searchTopicTypes" ref="topicFilter" @search="search"
+            @create="clickCreateButton">
           </dmx-search-options>
         </el-collapse-item>
         <el-collapse-item title="Association Filter">
