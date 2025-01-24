@@ -21,7 +21,7 @@
     <div class="create" v-if="createEnabled">
       <div class="heading label">Create</div>
       <!-- "Create" menu -->
-      <el-select v-model="menuItem" value-key="uri" :disabled="menuDisabled" :title="menuTitle">
+      <el-select class="type-selector" v-model="menuItem" value-key="uri" :disabled="menuDisabled" :title="menuTitle">
         <el-option-group label="Topic Type">
           <el-option v-for="type in createTopicTypes" :label="type.value" :value="type" :key="type.uri">
             <span class="fa icon">{{type.icon}}</span><span>{{type.value}}</span>
@@ -368,6 +368,10 @@ export default {
 
 .dmx-search-widget.column .create {
   margin-top: 3em;
+}
+
+.dmx-search-widget .create .type-selector {
+  width: 200px;
 }
 
 .dmx-search-widget .create .options {

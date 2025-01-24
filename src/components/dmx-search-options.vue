@@ -137,6 +137,7 @@ export default {
 }
 
 .dmx-search-options .type-select .el-select {
+  max-width: 200px;
   margin-left: 6px;
 }
 
