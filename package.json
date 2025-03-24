@@ -10,6 +10,6 @@
     "url": "https://github.com/dmx-systems/dmx-search-widget.git"
   },
   "dependencies": {
-    "dmx-topic-list": "2.0.1"
+    "dmx-topic-list": "git+https://github.com/dmx-systems/dmx-topic-list.git"
   }
 }
